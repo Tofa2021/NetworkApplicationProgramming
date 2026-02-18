@@ -27,4 +27,10 @@ public class Student {
     public String getName() {
         return surname;
     }
+
+    public String getAbsenceString() {
+        List<String> localDateStrings = absences.stream().map(Utils::convertDateToString).toList();
+        return String.join(" ", localDateStrings);
+
+    }
 }

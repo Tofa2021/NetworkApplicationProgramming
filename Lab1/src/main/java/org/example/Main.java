@@ -18,9 +18,8 @@ public class Main {
             System.out.println("2) Добавить пропуск");
             System.out.println("3) Просмотреть пропуски группы");
             System.out.println("0) Выход");
-            int choice = scanInt();
 
-            switch (choice) {
+            switch (scanInt()) {
                 case 0 -> {
                     break mainLoop;
                 }

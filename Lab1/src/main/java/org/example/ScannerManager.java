@@ -35,6 +35,7 @@ public class ScannerManager {
                 return supplier.get();
             } catch (InputMismatchException e) {
                 System.out.println("Неправильной ввод. Повторите попытку");
+                scanner.next();
             }
         }
     }

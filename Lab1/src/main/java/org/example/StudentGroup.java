@@ -44,7 +44,7 @@ public class StudentGroup {
 
         for (int i = 0; i < students.size(); i++) {
             Student student = students.get(i);
-            System.out.println((i + 1) + ") " + student.getName() + " " + student.getAbsences());
+            System.out.println((i + 1) + ") " + student.getName() + " " + student.getAbsenceString());
         }
     }
 }
