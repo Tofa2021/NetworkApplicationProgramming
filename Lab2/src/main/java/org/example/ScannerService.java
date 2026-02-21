@@ -4,17 +4,11 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.InputMismatchException;
-import java.util.Scanner;
-import java.util.function.Supplier;
 
-public class ScannerManager {
-    public static final Scanner scanner = new Scanner(System.in);
+public interface ScannerService {
+    String scanString();
 
-    public static int scanInt() {
-        return scan(scanner::nextInt);
-    }
-
-    public static int scanBorderInt(int minValue, int maxValue) {
+    default int scanBorderInt(int minValue, int maxValue) {
         while (true) {
             int scannedValue = scanInt();
             if (minValue <= scannedValue && scannedValue <= maxValue) {
@@ -24,11 +18,7 @@ public class ScannerManager {
         }
     }
 
-    public static String scanString() {
-        return scan(scanner::next);
-    }
-
-    public static LocalDate scanLocalDate() {
+    default LocalDate scanLocalDate() {
         while (true) {
             String dateString = scanString();
             try {
@@ -39,13 +29,12 @@ public class ScannerManager {
         }
     }
 
-    private static <E> E scan(Supplier<E> supplier) {
+    default int scanInt() {
         while (true) {
             try {
-                return supplier.get();
+                return Integer.parseInt(scanString());
             } catch (InputMismatchException e) {
                 System.out.println("Неправильной ввод. Повторите попытку");
-                scanner.next();
             }
         }
     }

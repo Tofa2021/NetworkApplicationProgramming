@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.model.Employee;
+import org.example.model.Skill;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,6 +14,10 @@ public class EmployeeService {
 
     public static void add(Employee employee) {
         employees.add(employee);
+    }
+
+    public static void add(List<Employee> employees) {
+        EmployeeService.employees.addAll(employees);
     }
 
     public static void remove(int index) {
@@ -42,12 +47,22 @@ public class EmployeeService {
                 .toList();
     }
 
+    public static List<Employee> getBySkills(List<Skill> skills) {
+        return employees.stream()
+                .filter(employee -> employee.haveAnySkill(skills))
+                .toList();
+    }
+
     public static Employee select() {
-        return Utils.select(employees);
+        return Utils.select(SystemInService.INSTANCE, employees);
     }
 
     public static void sortByName() {
         employees.sort(Comparator.comparing(Employee::getName));
+    }
+
+    public static void sortByRole() {
+        employees.sort(Comparator.comparing(employee -> employee.getClass().getSimpleName()));
     }
 
     public static Map<String, List<Employee>> getGroupedByRole() {
