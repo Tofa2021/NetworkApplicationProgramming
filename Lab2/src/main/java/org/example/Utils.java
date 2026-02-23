@@ -15,7 +15,7 @@ public class Utils {
         return elements.get(selectedIndex);
     }
 
-    private static <T extends Nameable> void printList(List<T> elements) {
+    public static <T extends Nameable> void printList(List<T> elements) {
         for (int i = 0; i < elements.size(); i++) {
             System.out.println((i + 1) + ") " + elements.get(i).getName());
         }

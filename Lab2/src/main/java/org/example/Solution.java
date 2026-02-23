@@ -7,7 +7,7 @@ import org.example.model.Skill;
 import java.util.List;
 
 public class Solution {
-    public static void solve(ScannerService scanner) {
+    public static void solve(ScannerService scanner, EmployeeService employeeService) {
         mainLoop:
         while (true) {
             System.out.println("""
@@ -38,21 +38,16 @@ public class Solution {
                     String name = scanner.scanString();
                     System.out.println("Введите опыт работы");
                     int workExperience = scanner.scanBorderInt(0, 100);
-                    EmployeeService.add(new Developer(name, workExperience, List.of(Skill.PLACEHOLDER1, Skill.PLACEHOLDER2)));
+                    employeeService.add(new Developer(name, workExperience, List.of(Skill.PLACEHOLDER1, Skill.PLACEHOLDER2)));
                 }
                 case 4 -> {
-                    List<Employee> employees = EmployeeService.getEmployees();
-                    if (employees.isEmpty()) {
-                        System.out.println("Нет сотрудников");
-                    } else {
-                        employees.forEach(System.out::println);
-                    }
+                    employeeService.printList();
                 }
                 case 5 -> {
                     System.out.println("Введите пароль");
                     String password = scanner.scanString();
                     if (AuthService.checkPassword(password)) {
-                        EmployeeService.remove(EmployeeService.select());
+                        employeeService.remove(employeeService.select());
                     } else {
                         System.out.println("Неправильный пароль");
                     }
@@ -60,12 +55,7 @@ public class Solution {
                 case 7 -> {
                     System.out.println("Введите имя");
                     String name = scanner.scanString();
-                    EmployeeService.getByName(name).forEach(System.out::println);
-                }
-                case 9 -> {
-                    EmployeeService.getEmployees().stream()
-                            .filter(employee -> employee.getClass().equals(Developer.class))
-                            .forEach(System.out::println);
+                    employeeService.getByName(name).forEach(System.out::println);
                 }
                 case 10 -> {
                     System.out.println("Введите минимальный стаж");
@@ -73,19 +63,19 @@ public class Solution {
                     System.out.println("Введите максимальный стаж");
                     int maxWorkExperience = scanner.scanBorderInt(0, 100);
                     if (minWorkExperience <= maxWorkExperience) {
-                        EmployeeService.getByWorkExperience(minWorkExperience, maxWorkExperience).forEach(System.out::println);
+                        employeeService.getByWorkExperience(minWorkExperience, maxWorkExperience).forEach(System.out::println);
                     } else {
                         System.out.println("Минимальное значение не может быть больше максимального");
                     }
                 }
                 case 12 -> {
-                    EmployeeService.sortByName();
+                    employeeService.sortByName();
                 }
                 case 13 -> {
-                    EmployeeService.sortByRole();
+                    employeeService.sortByRole();
                 }
                 case 14 -> {
-                    for (var entry : EmployeeService.getGroupedByRole().entrySet()) {
+                    for (var entry : employeeService.getGroupedByRole().entrySet()) {
                         List<Employee> employees = entry.getValue();
                         int employeesCount = employees.size();
                         int allWorkExperience = employees.stream()
@@ -97,10 +87,10 @@ public class Solution {
                     }
                 }
                 case 15 -> {
-                    EmployeeService.save();
+                    employeeService.save();
                 }
                 case 16 -> {
-                    EmployeeService.load();
+                    employeeService.load();
                 }
             }
         }

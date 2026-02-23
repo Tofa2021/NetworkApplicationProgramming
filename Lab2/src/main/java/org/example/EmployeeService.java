@@ -3,78 +3,38 @@ package org.example;
 import org.example.model.Employee;
 import org.example.model.Skill;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
-public class EmployeeService {
-    private static List<Employee> employees = new ArrayList<>();
+public interface EmployeeService {
+    void sortByRole();
 
-    public static void add(Employee employee) {
-        employees.add(employee);
-    }
+    Map<String, List<Employee>> getGroupedByRole();
 
-    public static void add(List<Employee> employees) {
-        EmployeeService.employees.addAll(employees);
-    }
+    void save();
 
-    public static void remove(int index) {
-        employees.remove(index);
-    }
+    void load();
 
-    public static void remove(Employee employee) {
-        employees.remove(employee);
-    }
+    List<Employee> getByRole(Predicate<Employee> predicate);
 
-    public static List<Employee> getEmployees() {
-        return employees;
-    }
+    Employee select();
 
-    public static List<Employee> getByName(String name) {
-        return employees.stream()
-                .filter(employee -> employee.getName().equals(name))
-                .collect(Collectors.toList());
-    }
+    void sortByName();
 
-    public static List<Employee> getByWorkExperience(int lowerBound, int upperBound) {
-        return employees.stream()
-                .filter(employee -> {
-                    int workExperience = employee.getWorkExperience();
-                    return lowerBound <= workExperience && workExperience < upperBound;
-                })
-                .toList();
-    }
+    void printList();
 
-    public static List<Employee> getBySkills(List<Skill> skills) {
-        return employees.stream()
-                .filter(employee -> employee.haveAnySkill(skills))
-                .toList();
-    }
+    void add(Employee employee);
 
-    public static Employee select() {
-        return Utils.select(SystemInService.INSTANCE, employees);
-    }
+    void add(List<Employee> employees);
 
-    public static void sortByName() {
-        employees.sort(Comparator.comparing(Employee::getName));
-    }
+    void remove(int index);
 
-    public static void sortByRole() {
-        employees.sort(Comparator.comparing(employee -> employee.getClass().getSimpleName()));
-    }
+    void remove(Employee employee);
 
-    public static Map<String, List<Employee>> getGroupedByRole() {
-        return employees.stream()
-                .collect(Collectors.groupingBy(employee -> employee.getClass().getSimpleName()));
-    }
+    List<Employee> getByName(String name);
 
-    public static void save() {
-        FileManager.save(employees);
-    }
+    List<Employee> getByWorkExperience(int lowerBound, int upperBound);
 
-    public static void load() {
-        employees = FileManager.load();
-    }
+    List<Employee> getBySkills(List<Skill> skills);
 }

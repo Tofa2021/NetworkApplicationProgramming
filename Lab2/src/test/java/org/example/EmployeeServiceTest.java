@@ -17,13 +17,11 @@ class EmployeeServiceTest {
                 new Tester("C", 5, List.of(Skill.PLACEHOLDER1))
         );
 
-        EmployeeService.add(employees);
-
         List<Skill> skills = List.of(Skill.PLACEHOLDER1);
 
         assertEquals(
                 employees,
-                EmployeeService.getBySkills(skills)
+                new EmployeeServiceImpl(employees).getBySkills(skills)
         );
     }
 }

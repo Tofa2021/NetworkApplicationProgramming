@@ -2,6 +2,6 @@ package org.example;
 
 public class Main {
     public static void main(String[] args) {
-        Solution.solve(SystemInService.INSTANCE);
+        Solution.solve(SystemInService.INSTANCE, new EmployeeServiceImpl());
     }
 }
