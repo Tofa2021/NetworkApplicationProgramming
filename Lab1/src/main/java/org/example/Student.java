@@ -20,10 +20,6 @@ public class Student {
         logger.info("Add absence to {} on date {}", surname, date);
     }
 
-    public List<LocalDate> getAbsences() {
-        return absences;
-    }
-
     public String getName() {
         return surname;
     }
@@ -31,6 +27,5 @@ public class Student {
     public String getAbsenceString() {
         List<String> localDateStrings = absences.stream().map(Utils::convertDateToString).toList();
         return String.join(" ", localDateStrings);
-
     }
 }

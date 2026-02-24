@@ -1,15 +1,9 @@
 package org.example;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 public class Solution {
-    private static final Logger logger = LogManager.getLogger(Solution.class);
-
     public static void solve(ScannerService scanner) {
         StudentGroup group = new StudentGroup();
 
-        mainLoop:
         while (true) {
             System.out.println("Выберите действие");
             System.out.println("1) Добавить студента");
@@ -19,7 +13,7 @@ public class Solution {
 
             switch (scanner.scanInt()) {
                 case 0 -> {
-                    break mainLoop;
+                    return;
                 }
                 case 1 -> {
                     System.out.println("Введите фамилию студента");
@@ -27,7 +21,7 @@ public class Solution {
                     group.addStudent(new Student(surname));
                 }
                 case 2 -> {
-                    if (group.getStudents().isEmpty()) {
+                    if (group.isEmpty()) {
                         System.out.println("Еще нет студентов");
                         break;
                     }
@@ -35,7 +29,7 @@ public class Solution {
                     System.out.println("Выберите студента");
                     group.showGroupList();
                     int studentIndex = scanner.scanInt() - 1;
-                    Student student = group.getStudents().get(studentIndex);
+                    Student student = group.get(studentIndex);
 
                     System.out.println("Введите дату пропуска");
                     student.addAbsence(scanner.scanLocalDate());
