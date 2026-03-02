@@ -11,34 +11,22 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class EmployeeServiceTest {
 
     @Test
-    void getBySkillsHappyPath() {
+    void getBySkills() {
+        Developer developer = new Developer("A", 3, List.of(Skill.COMMUNICATION), List.of());
+        Manager manager = new Manager("B", 10, List.of(Skill.COMMUNICATION, Skill.LEADERSHIP), 2);
+
         List<Employee> employees = List.of(
-                new Developer("A", 3, List.of(Skill.PLACEHOLDER1)),
-                new Manager("B", 10, List.of(Skill.PLACEHOLDER1)),
-                new Tester("C", 5, List.of(Skill.PLACEHOLDER1))
+                developer,
+                manager,
+                new Tester("C", 5, List.of(Skill.TEAMWORK, Skill.CRITICAL_THINKING), List.of()),
+                new Tester("D", 5, List.of(), List.of())
         );
 
-        List<Skill> skills = List.of(Skill.PLACEHOLDER1);
+        List<Skill> skills = List.of(Skill.COMMUNICATION);
 
         assertEquals(
-                employees,
+                List.of(developer, manager),
                 new EmployeeServiceImpl(employees).getBySkills(skills)
-        );
-    }
-
-    @Test
-    void getBySkillsSadPath() {
-        List<Employee> employees = List.of(
-                new Developer("A", 3, List.of(Skill.PLACEHOLDER1)),
-                new Manager("B", 10, List.of(Skill.PLACEHOLDER2)),
-                new Tester("C", 5, List.of(Skill.PLACEHOLDER3))
-        );
-
-        List<Skill> skills = List.of(Skill.PLACEHOLDER1);
-
-        assertEquals(
-                employees.get(0),
-                new EmployeeServiceImpl(employees).getBySkills(skills).get(0)
         );
     }
 }

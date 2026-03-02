@@ -48,7 +48,7 @@ public class Utils {
         List<T> copiedElements = new ArrayList<>(elements);
         List<T> selectedElements = new ArrayList<>();
 
-        while (!copiedElements.isEmpty()) {
+        for (int i = 0; i < count; i++) {
             T element = select(scanner, copiedElements);
             copiedElements.remove(element);
             selectedElements.add(element);
