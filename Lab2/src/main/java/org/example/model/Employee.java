@@ -5,7 +5,7 @@ import org.example.Nameable;
 import java.io.Serializable;
 import java.util.List;
 
-public abstract class Employee implements Serializable, Nameable {
+public abstract class Employee implements Serializable, Nameable, Describable {
     private final String name;
     private final int workExperience;
     private final List<Skill> skills;
@@ -28,10 +28,11 @@ public abstract class Employee implements Serializable, Nameable {
         return name;
     }
 
-    public String getInfo() {
-        return name +
-                " Стаж: " + workExperience +
-                " Умения: " + String.join(" ", skills.stream().map(Skill::getName).toList());
+    @Override
+    public String getDescription() {
+        String skillsString = skills.isEmpty() ? "" : " Умения: " + String.join(" ", skills.stream().map(Skill::getName).toList());
+
+        return "Должность: " + this.getClass().getSimpleName() + " Стаж: " + workExperience + skillsString;
     }
 
     public int getWorkExperience() {

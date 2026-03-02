@@ -8,6 +8,17 @@ import java.util.InputMismatchException;
 public interface ScannerService {
     String scanString();
 
+    default String scanNonEmptyString() {
+        String name;
+        while (true) {
+            name = scanString();
+            if (!name.isEmpty()) {
+                return name;
+            }
+            System.out.println("Ввод не может быть пустым");
+        }
+    }
+
     default int scanBorderInt(int minValue, int maxValue) {
         while (true) {
             int scannedValue = scanInt();

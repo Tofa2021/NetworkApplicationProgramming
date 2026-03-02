@@ -4,9 +4,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Tester extends Employee {
-    private final List<String> testTools;
+    private final List<TestTools> testTools;
 
-    public Tester(String name, int workExperience, List<Skill> skills, List<String> testTools) {
+    public Tester(String name, int workExperience, List<Skill> skills, List<TestTools> testTools) {
         super(name, workExperience, skills);
         this.testTools = testTools;
     }
@@ -16,7 +16,16 @@ public class Tester extends Employee {
     }
 
     @Override
-    public String getInfo() {
-        return super.getInfo() + " Инструменты: " + String.join(" ", testTools);
+    public String getDescription() {
+        String testToolsString = testTools.isEmpty() ?
+                "" :
+                " Инструменты: " + String.join(
+                        " ",
+                        testTools.stream()
+                                .map(TestTools::getName)
+                                .toList()
+                );
+
+        return super.getDescription() + testToolsString;
     }
 }

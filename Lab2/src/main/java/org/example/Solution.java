@@ -6,13 +6,17 @@ import org.example.service.EmployeeService;
 import org.example.service.ProjectService;
 import org.example.service.ScannerService;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
 
 public class Solution {
-    public static void solve(ScannerService scanner, EmployeeService employeeService, ProjectService projectService) {
+    public static void solve(
+            ScannerService scanner,
+            EmployeeService employeeService,
+            ProjectService projectService,
+            EmployeeFactory employeeFactory
+    ) {
         mainLoop:
         while (true) {
             System.out.println("""
@@ -39,43 +43,16 @@ public class Solution {
                     break mainLoop;
                 }
                 case 1 -> {
-                    System.out.println("Введите имя сотрудника");
-                    String name = scanner.scanString();
-
-                    System.out.println("Введите опыт работы");
-                    int workExperience = scanner.scanBorderInt(0, 100);
-
-                    System.out.println("Выберите сколько языков знает разработчик");
-                    int count = scanner.scanBorderInt(0, ProgrammingLanguages.values().length);
-
-                    System.out.println("Выберите языки программирования");
-                    List<ProgrammingLanguages> programmingLanguages = ProgrammingLanguages.GO.multiSelect(scanner, count);
-
-                    employeeService.add(
-                            new Developer(
-                                    name,
-                                    workExperience,
-                                    List.of(Skill.PLACEHOLDER1, Skill.PLACEHOLDER2),
-                                    programmingLanguages
-                            )
-                    );
+                    employeeService.add(employeeFactory.inputDeveloper());
                 }
                 case 2 -> {
-                    System.out.println("Введите имя сотрудника");
-                    String name = scanner.scanString();
-                    System.out.println("Введите опыт работы");
-                    int workExperience = scanner.scanBorderInt(0, 100);
-                    employeeService.add(new Tester(name, workExperience, List.of(Skill.PLACEHOLDER1, Skill.PLACEHOLDER2)));
+                    employeeService.add(employeeFactory.inputTester());
                 }
                 case 3 -> {
-                    System.out.println("Введите имя сотрудника");
-                    String name = scanner.scanString();
-                    System.out.println("Введите опыт работы");
-                    int workExperience = scanner.scanBorderInt(0, 100);
-                    employeeService.add(new Manager(name, workExperience, List.of(Skill.PLACEHOLDER1, Skill.PLACEHOLDER2)));
+                    employeeService.add(employeeFactory.inputManager());
                 }
                 case 4 -> {
-                    employeeService.printList();
+                    employeeService.printDescribableList();
                 }
                 case 5 -> {
                     System.out.println("Введите пароль");
@@ -92,13 +69,11 @@ public class Solution {
                 case 7 -> {
                     System.out.println("Введите имя");
                     String name = scanner.scanString();
-                    employeeService.getByName(name).forEach(System.out::println);
+                    Utils.printList(employeeService.getByName(name));
                 }
                 case 8 -> {
-                    System.out.println("Введите количество навыков");
-                    int count = scanner.scanBorderInt(0, Skill.values().length);
                     System.out.println("Выберите навыки");
-                    List<Skill> skills = Utils.multiSelect(scanner, Arrays.stream(Skill.values()).toList(), count);
+                    List<Skill> skills = Skill.multiSelect(scanner);
                     Utils.printList(employeeService.getBySkills(skills));
                 }
                 case 9 -> {
@@ -113,13 +88,15 @@ public class Solution {
                         case 3 -> Manager.getIsInstancePredicate();
                         default -> throw new NoSuchElementException();
                     };
-                    employeeService.getByRole(predicate);
+                    Utils.printList(employeeService.getByRole(predicate));
                 }
                 case 10 -> {
                     System.out.println("Введите минимальный стаж");
                     int minWorkExperience = scanner.scanBorderInt(0, 100);
+
                     System.out.println("Введите максимальный стаж");
                     int maxWorkExperience = scanner.scanBorderInt(0, 100);
+
                     if (minWorkExperience <= maxWorkExperience) {
                         employeeService.getByWorkExperience(minWorkExperience, maxWorkExperience).forEach(System.out::println);
                     } else {

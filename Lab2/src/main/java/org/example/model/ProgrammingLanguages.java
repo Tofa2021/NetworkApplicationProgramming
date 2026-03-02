@@ -6,7 +6,7 @@ import org.example.service.ScannerService;
 
 import java.util.List;
 
-public enum ProgrammingLanguages implements Nameable, SelectableEnum<ProgrammingLanguages> {
+public enum ProgrammingLanguages implements Nameable {
     PYTHON("Python"),
     JAVA("Java"),
     C_SHARP("С#"),
@@ -20,12 +20,20 @@ public enum ProgrammingLanguages implements Nameable, SelectableEnum<Programming
         this.name = name;
     }
 
+    public static ProgrammingLanguages select(ScannerService scanner) {
+        return Utils.select(scanner, List.of(values()));
+    }
+
+    public static List<ProgrammingLanguages> multiSelect(ScannerService scanner, int count) {
+        return Utils.multiSelect(scanner, List.of(values()), count);
+    }
+
+    public static List<ProgrammingLanguages> multiSelect(ScannerService scanner) {
+        return Utils.multiSelect(scanner, List.of(values()));
+    }
+
     @Override
     public String getName() {
         return name;
-    }
-
-    public ProgrammingLanguages select(ScannerService scanner) {
-        return Utils.select(scanner, List.of(values()));
     }
 }

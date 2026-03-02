@@ -16,10 +16,17 @@ public class Developer extends Employee {
     }
 
     @Override
-    public String getInfo() {
-        return super.getInfo() +
-                " Языки программирования: " + String.join(" ", programmingLanguages.stream()
-                .map(ProgrammingLanguages::getName)
-                .toList());
+    public String getDescription() {
+        String languagesString = programmingLanguages.isEmpty() ?
+                "" :
+                " Языки программирования: " + String.join(
+                        " ",
+                        programmingLanguages.stream()
+                                .map(ProgrammingLanguages::getName)
+                                .toList()
+                );
+
+        return super.getDescription() + languagesString;
+
     }
 }

@@ -18,7 +18,8 @@ public class Main {
                                 new Project("AbacusDelivery"),
                                 new Project("DiceHome")
                         ))
-                )
+                ),
+                new EmployeeFactory(SystemInService.INSTANCE)
         );
     }
 }

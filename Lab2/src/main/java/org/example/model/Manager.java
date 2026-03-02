@@ -16,7 +16,7 @@ public class Manager extends Employee {
     }
 
     @Override
-    public String getInfo() {
-        return super.getInfo() + " Размер команды: " + teamSize;
+    public String getDescription() {
+        return super.getDescription() + " Размер команды: " + teamSize;
     }
 }
