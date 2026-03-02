@@ -23,8 +23,15 @@ public abstract class Employee implements Serializable, Nameable {
         return false;
     }
 
+    @Override
     public String getName() {
         return name;
+    }
+
+    public String getInfo() {
+        return name +
+                " Стаж: " + workExperience +
+                " Умения: " + String.join(" ", skills.stream().map(Skill::getName).toList());
     }
 
     public int getWorkExperience() {

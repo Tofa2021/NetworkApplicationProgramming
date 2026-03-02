@@ -1,12 +1,10 @@
-package org.example;
+package org.example.service;
 
+import org.example.FileManager;
 import org.example.model.Employee;
 import org.example.model.Skill;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -20,28 +18,29 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.employees = employees;
     }
 
-    public void add(Employee employee) {
-        employees.add(employee);
+    @Override
+    public boolean add(Employee employee) {
+        return employees.add(employee);
     }
 
-    public void add(List<Employee> employees) {
-        this.employees.addAll(employees);
+    @Override
+    public Employee remove(int index) {
+        return employees.remove(index);
     }
 
-    public void remove(int index) {
-        employees.remove(index);
+    @Override
+    public boolean remove(Employee employee) {
+        return employees.remove(employee);
     }
 
-    public void remove(Employee employee) {
-        employees.remove(employee);
-    }
-
+    @Override
     public List<Employee> getByName(String name) {
         return employees.stream()
                 .filter(employee -> employee.getName().equals(name))
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Employee> getByWorkExperience(int lowerBound, int upperBound) {
         return employees.stream()
                 .filter(employee -> {
@@ -51,44 +50,48 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .toList();
     }
 
+    @Override
     public List<Employee> getBySkills(List<Skill> skills) {
         return employees.stream()
                 .filter(employee -> employee.haveOneOfSkills(skills))
                 .toList();
     }
 
-    public Employee select() {
-        return Utils.select(SystemInService.INSTANCE, employees);
+    @Override
+    public List<Employee> getElements() {
+        return Collections.unmodifiableList(employees);
     }
 
+    @Override
     public void sortByName() {
         employees.sort(Comparator.comparing(Employee::getName));
     }
 
+    @Override
     public void sortByRole() {
         employees.sort(Comparator.comparing(employee -> employee.getClass().getSimpleName()));
     }
 
+    @Override
     public Map<String, List<Employee>> getGroupedByRole() {
         return employees.stream()
                 .collect(Collectors.groupingBy(employee -> employee.getClass().getSimpleName()));
     }
 
+    @Override
     public void save() {
         FileManager.save(employees);
     }
 
+    @Override
     public void load() {
         employees = FileManager.load();
     }
 
+    @Override
     public List<Employee> getByRole(Predicate<Employee> predicate) {
         return employees.stream()
                 .filter(predicate)
                 .toList();
-    }
-
-    public void printList() {
-        Utils.printList(employees);
     }
 }

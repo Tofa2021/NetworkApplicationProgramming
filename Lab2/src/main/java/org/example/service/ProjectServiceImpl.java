@@ -1,9 +1,10 @@
-package org.example;
+package org.example.service;
 
 import org.example.model.Employee;
 import org.example.model.Project;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ProjectServiceImpl implements ProjectService {
@@ -15,6 +16,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     public ProjectServiceImpl() {
         projects = new ArrayList<>();
+    }
+
+    @Override
+    public List<Project> getElements() {
+        return Collections.unmodifiableList(projects);
     }
 
     @Override
@@ -33,27 +39,17 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public void printProjectList() {
-        Utils.printList(projects);
-    }
-
-    @Override
-    public Project select() {
-        return Utils.select(SystemInService.INSTANCE, projects);
-    }
-
-    @Override
-    public void addEmployeeToProject(EmployeeService employeeService) {
+    public void addEmployeeToProject(ScannerService scanner, EmployeeService employeeService) {
         if (projects.isEmpty()) {
             System.out.println("Нет проектов");
             return;
         }
 
         System.out.println("Выберите проект");
-        Project project = select();
+        Project project = select(scanner);
 
         System.out.println("Выберите сотрудника");
-        Employee employee = employeeService.select();
+        Employee employee = employeeService.select(scanner);
 
         project.addEmployee(employee);
     }

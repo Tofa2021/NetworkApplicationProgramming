@@ -2,15 +2,16 @@ package org.example.model;
 
 import org.example.Nameable;
 
-public enum Skill implements Nameable, SelectableEnum<Skill> {
-    PLACEHOLDER1("PLACEHOLDER1"),
-    PLACEHOLDER2("PLACEHOLDER2"),
-    PLACEHOLDER3("PLACEHOLDER3"),
+public enum TestTools implements Nameable, SelectableEnum<TestTools> {
+    POSTMAN("Postman"),
+    SELENIUM("Selenium"),
+    SOAPUI("SoapUI"),
+    DBEAVER("DBeaver"),
     ;
 
     private final String name;
 
-    Skill(String name) {
+    TestTools(String name) {
         this.name = name;
     }
 

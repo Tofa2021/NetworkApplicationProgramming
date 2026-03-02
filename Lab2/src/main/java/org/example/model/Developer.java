@@ -4,11 +4,22 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Developer extends Employee {
-    public Developer(String name, int workExperience, List<Skill> skills) {
+    private final List<ProgrammingLanguages> programmingLanguages;
+
+    public Developer(String name, int workExperience, List<Skill> skills, List<ProgrammingLanguages> programmingLanguages) {
         super(name, workExperience, skills);
+        this.programmingLanguages = programmingLanguages;
     }
 
-    public static Predicate<Object> getIsInstancePredicate() {
-        return (obj) -> obj instanceof Developer;
+    public static Predicate<Employee> getIsInstancePredicate() {
+        return (employee) -> employee instanceof Developer;
+    }
+
+    @Override
+    public String getInfo() {
+        return super.getInfo() +
+                " Языки программирования: " + String.join(" ", programmingLanguages.stream()
+                .map(ProgrammingLanguages::getName)
+                .toList());
     }
 }

@@ -4,11 +4,19 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Manager extends Employee {
-    public Manager(String name, int workExperience, List<Skill> skills) {
+    private final int teamSize;
+
+    public Manager(String name, int workExperience, List<Skill> skills, int teamSize) {
         super(name, workExperience, skills);
+        this.teamSize = teamSize;
     }
 
-    public static Predicate<Object> getIsInstancePredicate() {
-        return (obj) -> obj instanceof Manager;
+    public static Predicate<Employee> getIsInstancePredicate() {
+        return (employee) -> employee instanceof Manager;
+    }
+
+    @Override
+    public String getInfo() {
+        return super.getInfo() + " Размер команды: " + teamSize;
     }
 }

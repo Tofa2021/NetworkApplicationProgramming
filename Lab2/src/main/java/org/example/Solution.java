@@ -1,9 +1,15 @@
 package org.example;
 
 import org.example.model.*;
+import org.example.service.AuthService;
+import org.example.service.EmployeeService;
+import org.example.service.ProjectService;
+import org.example.service.ScannerService;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.function.Predicate;
 
 public class Solution {
     public static void solve(ScannerService scanner, EmployeeService employeeService, ProjectService projectService) {
@@ -35,9 +41,24 @@ public class Solution {
                 case 1 -> {
                     System.out.println("Введите имя сотрудника");
                     String name = scanner.scanString();
+
                     System.out.println("Введите опыт работы");
                     int workExperience = scanner.scanBorderInt(0, 100);
-                    employeeService.add(new Developer(name, workExperience, List.of(Skill.PLACEHOLDER1, Skill.PLACEHOLDER2)));
+
+                    System.out.println("Выберите сколько языков знает разработчик");
+                    int count = scanner.scanBorderInt(0, ProgrammingLanguages.values().length);
+
+                    System.out.println("Выберите языки программирования");
+                    List<ProgrammingLanguages> programmingLanguages = ProgrammingLanguages.GO.multiSelect(scanner, count);
+
+                    employeeService.add(
+                            new Developer(
+                                    name,
+                                    workExperience,
+                                    List.of(Skill.PLACEHOLDER1, Skill.PLACEHOLDER2),
+                                    programmingLanguages
+                            )
+                    );
                 }
                 case 2 -> {
                     System.out.println("Введите имя сотрудника");
@@ -60,13 +81,13 @@ public class Solution {
                     System.out.println("Введите пароль");
                     String password = scanner.scanString();
                     if (AuthService.checkPassword(password)) {
-                        employeeService.remove(employeeService.select());
+                        employeeService.remove(employeeService.select(scanner));
                     } else {
                         System.out.println("Неправильный пароль");
                     }
                 }
                 case 6 -> {
-                    projectService.addEmployeeToProject(employeeService);
+                    projectService.addEmployeeToProject(scanner, employeeService);
                 }
                 case 7 -> {
                     System.out.println("Введите имя");
@@ -81,7 +102,18 @@ public class Solution {
                     Utils.printList(employeeService.getBySkills(skills));
                 }
                 case 9 -> {
-                    
+                    System.out.println("""
+                            Выберите должность
+                            1) Разработчик
+                            2) Тестировщик
+                            3) Менеджер""");
+                    Predicate<Employee> predicate = switch (scanner.scanBorderInt(0, 3)) {
+                        case 1 -> Developer.getIsInstancePredicate();
+                        case 2 -> Tester.getIsInstancePredicate();
+                        case 3 -> Manager.getIsInstancePredicate();
+                        default -> throw new NoSuchElementException();
+                    };
+                    employeeService.getByRole(predicate);
                 }
                 case 10 -> {
                     System.out.println("Введите минимальный стаж");
@@ -96,7 +128,7 @@ public class Solution {
                 }
                 case 11 -> {
                     System.out.println("Выберите проект");
-                    projectService.select().printEmployees();
+                    projectService.select(scanner).printEmployees();
                 }
                 case 12 -> {
                     employeeService.sortByName();
@@ -105,16 +137,22 @@ public class Solution {
                     employeeService.sortByRole();
                 }
                 case 14 -> {
-                    for (var entry : employeeService.getGroupedByRole().entrySet()) {
-                        List<Employee> employees = entry.getValue();
-                        int employeesCount = employees.size();
-                        int allWorkExperience = employees.stream()
-                                .map(Employee::getWorkExperience)
-                                .reduce(Integer::sum)
-                                .get();
-                        double averageRoleWorkExperience = (double) allWorkExperience / employeesCount;
-                        System.out.println(entry.getKey() + " Количество сотрудников: " + employeesCount + " Средний стаж: " + averageRoleWorkExperience);
+                    var groupedByRole = employeeService.getGroupedByRole();
+                    if (groupedByRole.isEmpty()) {
+                        System.out.println("Нет сотрудников для статистики");
+                        continue;
                     }
+
+                    groupedByRole.forEach((role, employees) -> {
+                        int count = employees.size();
+                        double averageWorkExperience = employees.stream()
+                                .mapToInt(Employee::getWorkExperience)
+                                .average()
+                                .orElse(0);
+
+                        System.out.printf("%s Количество сотрудников: %d Средний стаж: %.2f%n",
+                                role, count, averageWorkExperience);
+                    });
                 }
                 case 15 -> {
                     employeeService.save();

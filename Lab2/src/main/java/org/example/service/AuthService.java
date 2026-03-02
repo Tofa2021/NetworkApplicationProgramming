@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 public class AuthService {
     private final static String PASSWORD = "1234";

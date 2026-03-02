@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.service.ScannerService;
+
 import java.util.Iterator;
 import java.util.List;
 
