@@ -16,6 +16,10 @@ public class Utils {
     }
 
     public static <T extends Nameable> void printList(List<T> elements) {
+        if (elements.isEmpty()) {
+            System.out.println("Пусто");
+        }
+
         for (int i = 0; i < elements.size(); i++) {
             System.out.println((i + 1) + ") " + elements.get(i).getName());
         }

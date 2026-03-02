@@ -53,7 +53,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     public List<Employee> getBySkills(List<Skill> skills) {
         return employees.stream()
-                .filter(employee -> employee.haveAnySkill(skills))
+                .filter(employee -> employee.haveOneOfSkills(skills))
                 .toList();
     }
 

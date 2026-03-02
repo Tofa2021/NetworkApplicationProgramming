@@ -33,7 +33,7 @@ public interface ScannerService {
         while (true) {
             try {
                 return Integer.parseInt(scanString());
-            } catch (InputMismatchException e) {
+            } catch (InputMismatchException | NumberFormatException e) {
                 System.out.println("Неправильной ввод. Повторите попытку");
             }
         }

@@ -16,12 +16,8 @@ public abstract class Employee implements Serializable, Nameable {
         this.skills = skills;
     }
 
-    public List<Skill> getSkills() {
-        return skills;
-    }
-
-    public boolean haveAnySkill(List<Skill> skills) {
-        for (Skill skill : skills) {
+    public boolean haveOneOfSkills(List<Skill> skills) {
+        for (Skill skill : this.skills) {
             return skills.contains(skill);
         }
         return false;
@@ -33,13 +29,5 @@ public abstract class Employee implements Serializable, Nameable {
 
     public int getWorkExperience() {
         return workExperience;
-    }
-
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "name='" + name + '\'' +
-                ", workExperience=" + workExperience +
-                '}';
     }
 }
