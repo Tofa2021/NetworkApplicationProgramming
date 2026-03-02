@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.Utils;
 import org.example.model.Employee;
 import org.example.model.Project;
 
@@ -48,8 +49,11 @@ public class ProjectServiceImpl implements ProjectService {
         System.out.println("Выберите проект");
         Project project = select(scanner);
 
+        var employees = new ArrayList<>(List.copyOf(employeeService.getElements()));
+        employees.removeAll(project.getEmployees());
+
         System.out.println("Выберите сотрудника");
-        Employee employee = employeeService.select(scanner);
+        Employee employee = Utils.select(scanner, employees);
 
         project.addEmployee(employee);
     }

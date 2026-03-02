@@ -4,6 +4,7 @@ import org.example.Nameable;
 import org.example.Utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Project implements Nameable {
@@ -18,6 +19,10 @@ public class Project implements Nameable {
     public Project(String name) {
         this.name = name;
         employees = new ArrayList<>();
+    }
+
+    public List<Employee> getEmployees() {
+        return Collections.unmodifiableList(employees);
     }
 
     @Override

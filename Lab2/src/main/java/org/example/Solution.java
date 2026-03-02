@@ -20,6 +20,7 @@ public class Solution {
         mainLoop:
         while (true) {
             System.out.println("""
+                    
                     Выберите пункт меню
                     1) Добавить разработчика
                     2) Добавить тестировщика
@@ -42,18 +43,14 @@ public class Solution {
                 case 0 -> {
                     break mainLoop;
                 }
-                case 1 -> {
-                    employeeService.add(employeeFactory.inputDeveloper());
-                }
-                case 2 -> {
-                    employeeService.add(employeeFactory.inputTester());
-                }
-                case 3 -> {
-                    employeeService.add(employeeFactory.inputManager());
-                }
-                case 4 -> {
-                    employeeService.printDescribableList();
-                }
+                case 1 -> employeeService.add(employeeFactory.inputDeveloper());
+
+                case 2 -> employeeService.add(employeeFactory.inputTester());
+
+                case 3 -> employeeService.add(employeeFactory.inputManager());
+
+                case 4 -> employeeService.printDescribableList();
+
                 case 5 -> {
                     System.out.println("Введите пароль");
                     String password = scanner.scanString();
@@ -63,9 +60,8 @@ public class Solution {
                         System.out.println("Неправильный пароль");
                     }
                 }
-                case 6 -> {
-                    projectService.addEmployeeToProject(scanner, employeeService);
-                }
+                case 6 -> projectService.addEmployeeToProject(scanner, employeeService);
+
                 case 7 -> {
                     System.out.println("Введите имя");
                     String name = scanner.scanString();
@@ -98,7 +94,7 @@ public class Solution {
                     int maxWorkExperience = scanner.scanBorderInt(0, 100);
 
                     if (minWorkExperience <= maxWorkExperience) {
-                        employeeService.getByWorkExperience(minWorkExperience, maxWorkExperience).forEach(System.out::println);
+                        Utils.printList(employeeService.getByWorkExperience(minWorkExperience, maxWorkExperience));
                     } else {
                         System.out.println("Минимальное значение не может быть больше максимального");
                     }
@@ -107,12 +103,10 @@ public class Solution {
                     System.out.println("Выберите проект");
                     projectService.select(scanner).printEmployees();
                 }
-                case 12 -> {
-                    employeeService.sortByName();
-                }
-                case 13 -> {
-                    employeeService.sortByRole();
-                }
+                case 12 -> employeeService.sortByName();
+
+                case 13 -> employeeService.sortByRole();
+
                 case 14 -> {
                     var groupedByRole = employeeService.getGroupedByRole();
                     if (groupedByRole.isEmpty()) {
@@ -131,12 +125,9 @@ public class Solution {
                                 role, count, averageWorkExperience);
                     });
                 }
-                case 15 -> {
-                    employeeService.save();
-                }
-                case 16 -> {
-                    employeeService.load();
-                }
+                case 15 -> employeeService.save();
+
+                case 16 -> employeeService.load();
             }
         }
     }

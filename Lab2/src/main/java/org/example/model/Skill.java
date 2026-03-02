@@ -7,9 +7,13 @@ import org.example.service.ScannerService;
 import java.util.List;
 
 public enum Skill implements Nameable {
-    PLACEHOLDER1("PLACEHOLDER1"),
-    PLACEHOLDER2("PLACEHOLDER2"),
-    PLACEHOLDER3("PLACEHOLDER3"),
+    COMMUNICATION("Коммуникабельность"),
+    TEAMWORK("Работа в команде"),
+    PROBLEM_SOLVING("Решение проблем"),
+    CRITICAL_THINKING("Критическое мышление"),
+    TIME_MANAGEMENT("Тайм-менеджмент"),
+    LEADERSHIP("Лидерство"),
+    MENTORING("Наставничество"),
     ;
 
     private final String name;
