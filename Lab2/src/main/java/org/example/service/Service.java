@@ -1,7 +1,7 @@
 package org.example.service;
 
-import org.example.Nameable;
 import org.example.Utils;
+import org.example.model.Nameable;
 
 import java.util.List;
 

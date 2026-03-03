@@ -1,6 +1,7 @@
 package org.example;
 
 import org.example.model.Describable;
+import org.example.model.Nameable;
 import org.example.service.ScannerService;
 
 import java.util.ArrayList;

@@ -1,6 +1,5 @@
 package org.example.model;
 
-import org.example.Nameable;
 import org.example.Utils;
 
 import java.util.ArrayList;

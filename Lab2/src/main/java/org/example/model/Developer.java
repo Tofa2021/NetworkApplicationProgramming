@@ -27,6 +27,5 @@ public class Developer extends Employee {
                 );
 
         return super.getDescription() + languagesString;
-
     }
 }

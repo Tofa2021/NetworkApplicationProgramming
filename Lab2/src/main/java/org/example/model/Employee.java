@@ -1,7 +1,5 @@
 package org.example.model;
 
-import org.example.Nameable;
-
 import java.io.Serializable;
 import java.util.List;
 
