@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.FileManager;
 import org.example.model.Employee;
+import org.example.model.Grade;
 import org.example.model.Skill;
 
 import java.util.*;
@@ -55,6 +56,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream()
                 .filter(employee -> employee.haveOneOfSkills(skills))
                 .toList();
+    }
+
+    @Override
+    public Map<Grade, List<Employee>> getMappedByGrade() {
+        return employees.stream().collect(Collectors.groupingBy(Employee::getGrade));
     }
 
     @Override

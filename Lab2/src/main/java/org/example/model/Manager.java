@@ -6,8 +6,8 @@ import java.util.function.Predicate;
 public class Manager extends Employee {
     private final int teamSize;
 
-    public Manager(String name, int workExperience, List<Skill> skills, int teamSize) {
-        super(name, workExperience, skills);
+    public Manager(String name, double salary, Grade grade, int workExperience, List<Skill> skills, int teamSize) {
+        super(name, salary, grade, workExperience, skills);
         this.teamSize = teamSize;
     }
 

@@ -38,16 +38,20 @@ public class Solution {
                     14) Статистика по ролям
                     15) Сохранить базу сотрудников
                     16) Загрузить базу сотрудников
+                    17) Перевести сотрудника на проект
+                    18) Удалить из проекта
+                    19) Просмотреть журнал переводов
+                    20) Статистика по грейдам //
                     0) Выход""");
             switch (scanner.scanInt()) {
                 case 0 -> {
                     break mainLoop;
                 }
-                case 1 -> employeeService.add(employeeFactory.inputDeveloper());
+                case 1 -> employeeService.add(employeeFactory.createDeveloper());
 
-                case 2 -> employeeService.add(employeeFactory.inputTester());
+                case 2 -> employeeService.add(employeeFactory.createTester());
 
-                case 3 -> employeeService.add(employeeFactory.inputManager());
+                case 3 -> employeeService.add(employeeFactory.createManager());
 
                 case 4 -> employeeService.printDescribableList();
 
@@ -60,8 +64,18 @@ public class Solution {
                         System.out.println("Неправильный пароль");
                     }
                 }
-                case 6 -> projectService.addEmployeeToProject(scanner, employeeService);
-
+                case 6 -> {
+                    Project project = projectService.select(scanner);
+                    List<Employee> employees = employeeService.getElements().stream()
+                            .filter(employee -> employee.getProject() == null)
+                            .toList();
+                    if (employees.isEmpty()) {
+                        System.out.println("Пусто");
+                        return;
+                    }
+                    Employee employee = employeeService.select(scanner, employees);
+                    projectService.addToProject(project, employee);
+                }
                 case 7 -> {
                     System.out.println("Введите имя");
                     String name = scanner.scanString();
@@ -101,7 +115,9 @@ public class Solution {
                 }
                 case 11 -> {
                     System.out.println("Выберите проект");
-                    projectService.select(scanner).printEmployees();
+                    Project project = projectService.select(scanner);
+                    List<Employee> employees = employeeService.getByProject(project);
+                    Utils.printList(employees);
                 }
                 case 12 -> employeeService.sortByName();
 
@@ -128,6 +144,39 @@ public class Solution {
                 case 15 -> employeeService.save();
 
                 case 16 -> employeeService.load();
+
+                case 17 -> {
+                    Project newProject = projectService.select(scanner);
+                    List<Employee> employees = employeeService.getElements().stream()
+                            .filter(employee -> employee.getProject() != newProject)
+                            .toList();
+                    if (employees.isEmpty()) {
+                        System.out.println("Пусто");
+                        return;
+                    }
+                    Employee employee = employeeService.select(scanner, employees);
+                    projectService.transfer(newProject, employee);
+                }
+                case 18 -> {
+                    Project project = projectService.select(scanner);
+                    List<Employee> projectEmployees = employeeService.getElements().stream()
+                            .filter(e -> e.getProject() == project)
+                            .toList();
+                    if (projectEmployees.isEmpty()) {
+                        System.out.println("Пусто");
+                        return;
+                    }
+                    Employee employee = employeeService.select(scanner, projectEmployees);
+                    projectService.removeFromProject(employee);
+                }
+                case 19 -> projectService.getProjectLogger().printLogs();
+
+                case 20 -> {
+                    var map = employeeService.getMappedByGrade();
+                    for (var entry : map.entrySet()) {
+                        System.out.println(entry.getKey().getName() + " " + entry.getValue().size());
+                    }
+                }
             }
         }
     }

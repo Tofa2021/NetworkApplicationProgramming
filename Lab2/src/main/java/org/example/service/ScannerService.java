@@ -49,4 +49,14 @@ public interface ScannerService {
             }
         }
     }
+
+    default double scanDouble() {
+        while (true) {
+            try {
+                return Double.parseDouble(scanString());
+            } catch (InputMismatchException | NumberFormatException e) {
+                System.out.println("Неправильной ввод. Повторите попытку");
+            }
+        }
+    }
 }

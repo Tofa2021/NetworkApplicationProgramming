@@ -6,8 +6,8 @@ import java.util.function.Predicate;
 public class Tester extends Employee {
     private final List<TestTools> testTools;
 
-    public Tester(String name, int workExperience, List<Skill> skills, List<TestTools> testTools) {
-        super(name, workExperience, skills);
+    public Tester(String name, double salary, Grade grade, int workExperience, List<Skill> skills, List<TestTools> testTools) {
+        super(name, salary, grade, workExperience, skills);
         this.testTools = testTools;
     }
 

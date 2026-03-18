@@ -18,6 +18,10 @@ public interface Service<T extends Nameable> {
         return Utils.select(scanner, getElements());
     }
 
+    default T select(ScannerService scanner, List<T> elements) {
+        return Utils.select(scanner, elements);
+    }
+
     default void printList() {
         Utils.printList(getElements());
     }

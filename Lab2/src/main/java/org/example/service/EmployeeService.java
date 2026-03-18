@@ -1,6 +1,8 @@
 package org.example.service;
 
 import org.example.model.Employee;
+import org.example.model.Grade;
+import org.example.model.Project;
 import org.example.model.Skill;
 
 import java.util.List;
@@ -25,4 +27,12 @@ public interface EmployeeService extends DescribableService<Employee> {
     List<Employee> getByWorkExperience(int lowerBound, int upperBound);
 
     List<Employee> getBySkills(List<Skill> skills);
+
+    default List<Employee> getByProject(Project project) {
+        return getElements().stream()
+                .filter(employee -> employee.getProject() == project)
+                .toList();
+    }
+
+    Map<Grade, List<Employee>> getMappedByGrade();
 }

@@ -6,8 +6,8 @@ import java.util.function.Predicate;
 public class Developer extends Employee {
     private final List<ProgrammingLanguages> programmingLanguages;
 
-    public Developer(String name, int workExperience, List<Skill> skills, List<ProgrammingLanguages> programmingLanguages) {
-        super(name, workExperience, skills);
+    public Developer(String name, double salary, Grade grade, int workExperience, List<Skill> skills, List<ProgrammingLanguages> programmingLanguages) {
+        super(name, salary, grade, workExperience, skills);
         this.programmingLanguages = programmingLanguages;
     }
 
