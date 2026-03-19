@@ -13,6 +13,8 @@ public class UtilsTest {
     public void testSelect() {
         Developer developer = new Developer(
                 "A",
+                1000,
+                Grade.JUNIOR,
                 3,
                 List.of(Skill.COMMUNICATION),
                 List.of(ProgrammingLanguages.C_SHARP)
@@ -23,6 +25,8 @@ public class UtilsTest {
         employees.add(
                 new Manager(
                         "B",
+                        1000,
+                        Grade.JUNIOR,
                         10,
                         List.of(Skill.COMMUNICATION),
                         10
@@ -31,6 +35,8 @@ public class UtilsTest {
         employees.add(
                 new Tester(
                         "C",
+                        1000,
+                        Grade.JUNIOR,
                         5,
                         List.of(Skill.COMMUNICATION),
                         List.of(TestTools.POSTMAN)
@@ -46,9 +52,9 @@ public class UtilsTest {
 
     @Test
     public void testMultiSelect() {
-        Developer developer = new Developer("A", 3, List.of(Skill.COMMUNICATION), List.of(ProgrammingLanguages.C_SHARP));
-        Manager manager = new Manager("B", 10, List.of(Skill.COMMUNICATION), 11);
-        Tester tester = new Tester("C", 5, List.of(Skill.COMMUNICATION), List.of(TestTools.DBEAVER));
+        Developer developer = new Developer("A", 1000, Grade.JUNIOR, 3, List.of(Skill.COMMUNICATION), List.of(ProgrammingLanguages.C_SHARP));
+        Manager manager = new Manager("B", 1000, Grade.JUNIOR, 10, List.of(Skill.COMMUNICATION), 11);
+        Tester tester = new Tester("C", 1000, Grade.JUNIOR, 5, List.of(Skill.COMMUNICATION), List.of(TestTools.DBEAVER));
         List<Employee> employees = new ArrayList<>();
         employees.add(developer);
         employees.add(manager);
@@ -63,9 +69,9 @@ public class UtilsTest {
 
     @Test
     public void testMultiSelectWithoutCount() {
-        Developer developer = new Developer("A", 3, List.of(Skill.COMMUNICATION), List.of(ProgrammingLanguages.C_SHARP));
-        Manager manager = new Manager("B", 10, List.of(Skill.COMMUNICATION), 11);
-        Tester tester = new Tester("C", 5, List.of(Skill.COMMUNICATION), List.of(TestTools.DBEAVER));
+        Developer developer = new Developer("A", 1000, Grade.JUNIOR, 3, List.of(Skill.COMMUNICATION), List.of(ProgrammingLanguages.C_SHARP));
+        Manager manager = new Manager("B", 1000, Grade.JUNIOR, 10, List.of(Skill.COMMUNICATION), 11);
+        Tester tester = new Tester("C", 1000, Grade.JUNIOR, 5, List.of(Skill.COMMUNICATION), List.of(TestTools.DBEAVER));
         List<Employee> employees = new ArrayList<>();
         employees.add(developer);
         employees.add(manager);

@@ -6,12 +6,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class ProjectServiceImpl implements ProjectService {
+    private final ScannerService scannerService;
     private final ProjectTransferLogger projectTransferLogger;
     private final List<Project> projects;
 
-    public ProjectServiceImpl(ProjectTransferLogger projectTransferLogger, List<Project> projects) {
+    public ProjectServiceImpl(ScannerService scannerService, ProjectTransferLogger projectTransferLogger, List<Project> projects) {
+        this.scannerService = scannerService;
         this.projectTransferLogger = projectTransferLogger;
         this.projects = projects;
+    }
+
+    @Override
+    public ScannerService getScannerService() {
+        return scannerService;
     }
 
     @Override

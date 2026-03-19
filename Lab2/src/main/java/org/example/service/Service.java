@@ -6,6 +6,8 @@ import org.example.model.Nameable;
 import java.util.List;
 
 public interface Service<T extends Nameable> {
+    ScannerService getScannerService();
+
     List<T> getElements();
 
     boolean add(T element);
@@ -14,12 +16,12 @@ public interface Service<T extends Nameable> {
 
     boolean remove(T element);
 
-    default T select(ScannerService scanner) {
-        return Utils.select(scanner, getElements());
+    default T select() {
+        return Utils.select(getScannerService(), getElements());
     }
 
-    default T select(ScannerService scanner, List<T> elements) {
-        return Utils.select(scanner, elements);
+    default T select(List<T> elements) {
+        return Utils.select(getScannerService(), elements);
     }
 
     default void printList() {

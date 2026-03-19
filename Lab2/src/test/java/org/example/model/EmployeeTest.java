@@ -10,8 +10,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class EmployeeTest {
 
     @Test
-    void haveOneOfSkillsHappyPath() {
-        Developer developer = new Developer("A", 3, List.of(Skill.COMMUNICATION, Skill.LEADERSHIP), List.of());
+    void haveOneOfSkills_skillFound() {
+        Developer developer = new Developer("A", 1000, Grade.JUNIOR, 3, List.of(Skill.COMMUNICATION, Skill.LEADERSHIP), List.of());
 
         List<Skill> skills = List.of(Skill.CRITICAL_THINKING, Skill.COMMUNICATION);
 
@@ -19,8 +19,8 @@ class EmployeeTest {
     }
 
     @Test
-    void haveOneOfSkillsSadPath() {
-        Developer developer = new Developer("A", 3, List.of(Skill.COMMUNICATION), List.of());
+    void haveOneOfSkills_skillNotFound() {
+        Developer developer = new Developer("A", 1000, Grade.JUNIOR, 3, List.of(Skill.COMMUNICATION), List.of());
 
         List<Skill> skills = List.of(Skill.LEADERSHIP);
 

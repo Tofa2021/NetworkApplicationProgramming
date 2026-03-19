@@ -41,7 +41,7 @@ public class Solution {
                     17) Перевести сотрудника на проект
                     18) Удалить из проекта
                     19) Просмотреть журнал переводов
-                    20) Статистика по грейдам //
+                    20) Статистика по грейдам
                     0) Выход""");
             switch (scanner.scanInt()) {
                 case 0 -> {
@@ -59,13 +59,13 @@ public class Solution {
                     System.out.println("Введите пароль");
                     String password = scanner.scanString();
                     if (AuthService.checkPassword(password)) {
-                        employeeService.remove(employeeService.select(scanner));
+                        employeeService.remove(employeeService.select());
                     } else {
                         System.out.println("Неправильный пароль");
                     }
                 }
                 case 6 -> {
-                    Project project = projectService.select(scanner);
+                    Project project = projectService.select();
                     List<Employee> employees = employeeService.getElements().stream()
                             .filter(employee -> employee.getProject() == null)
                             .toList();
@@ -73,7 +73,7 @@ public class Solution {
                         System.out.println("Пусто");
                         return;
                     }
-                    Employee employee = employeeService.select(scanner, employees);
+                    Employee employee = employeeService.select(employees);
                     projectService.addToProject(project, employee);
                 }
                 case 7 -> {
@@ -115,7 +115,7 @@ public class Solution {
                 }
                 case 11 -> {
                     System.out.println("Выберите проект");
-                    Project project = projectService.select(scanner);
+                    Project project = projectService.select();
                     List<Employee> employees = employeeService.getByProject(project);
                     Utils.printList(employees);
                 }
@@ -124,7 +124,7 @@ public class Solution {
                 case 13 -> employeeService.sortByRole();
 
                 case 14 -> {
-                    var groupedByRole = employeeService.getGroupedByRole();
+                    var groupedByRole = employeeService.getMappedByRole();
                     if (groupedByRole.isEmpty()) {
                         System.out.println("Нет сотрудников для статистики");
                         continue;
@@ -146,7 +146,7 @@ public class Solution {
                 case 16 -> employeeService.load();
 
                 case 17 -> {
-                    Project newProject = projectService.select(scanner);
+                    Project newProject = projectService.select();
                     List<Employee> employees = employeeService.getElements().stream()
                             .filter(employee -> employee.getProject() != newProject)
                             .toList();
@@ -154,11 +154,11 @@ public class Solution {
                         System.out.println("Пусто");
                         return;
                     }
-                    Employee employee = employeeService.select(scanner, employees);
+                    Employee employee = employeeService.select(employees);
                     projectService.transfer(newProject, employee);
                 }
                 case 18 -> {
-                    Project project = projectService.select(scanner);
+                    Project project = projectService.select();
                     List<Employee> projectEmployees = employeeService.getElements().stream()
                             .filter(e -> e.getProject() == project)
                             .toList();
@@ -166,7 +166,7 @@ public class Solution {
                         System.out.println("Пусто");
                         return;
                     }
-                    Employee employee = employeeService.select(scanner, projectEmployees);
+                    Employee employee = employeeService.select(projectEmployees);
                     projectService.removeFromProject(employee);
                 }
                 case 19 -> projectService.getProjectLogger().printLogs();

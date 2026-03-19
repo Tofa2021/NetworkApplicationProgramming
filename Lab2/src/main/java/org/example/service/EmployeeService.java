@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 public interface EmployeeService extends DescribableService<Employee> {
     void sortByRole();
 
-    Map<String, List<Employee>> getGroupedByRole();
+    Map<String, List<Employee>> getMappedByRole();
 
     void save();
 

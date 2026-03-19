@@ -10,12 +10,15 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class EmployeeServiceImpl implements EmployeeService {
+    private final ScannerService scannerService;
     private List<Employee> employees = new ArrayList<>();
 
-    public EmployeeServiceImpl() {
+    public EmployeeServiceImpl(ScannerService scannerService) {
+        this.scannerService = scannerService;
     }
 
-    public EmployeeServiceImpl(List<Employee> employees) {
+    public EmployeeServiceImpl(ScannerService scannerService, List<Employee> employees) {
+        this.scannerService = scannerService;
         this.employees = employees;
     }
 
@@ -64,6 +67,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public ScannerService getScannerService() {
+        return scannerService;
+    }
+
+    @Override
     public List<Employee> getElements() {
         return Collections.unmodifiableList(employees);
     }
@@ -79,7 +87,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Map<String, List<Employee>> getGroupedByRole() {
+    public Map<String, List<Employee>> getMappedByRole() {
         return employees.stream()
                 .collect(Collectors.groupingBy(employee -> employee.getClass().getSimpleName()));
     }

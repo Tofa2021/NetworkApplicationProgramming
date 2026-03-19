@@ -12,8 +12,9 @@ public class Main {
 
         Solution.solve(
                 scannerService,
-                new EmployeeServiceImpl(),
+                new EmployeeServiceImpl(scannerService),
                 new ProjectServiceImpl(
+                        scannerService,
                         new ProjectTransferLogger(),
                         new ArrayList<>(List.of(
                                 new Project("AbacusDelivery"),
