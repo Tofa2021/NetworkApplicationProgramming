@@ -1,18 +1,19 @@
 package org.example.service;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 
 import java.util.Collections;
 import java.util.List;
 
 public class ProjectServiceImpl implements ProjectService {
+    private final Logger logger = LogManager.getLogger(ProjectServiceImpl.class);
     private final ScannerService scannerService;
-    private final ProjectTransferLogger projectTransferLogger;
     private final List<Project> projects;
 
-    public ProjectServiceImpl(ScannerService scannerService, ProjectTransferLogger projectTransferLogger, List<Project> projects) {
+    public ProjectServiceImpl(ScannerService scannerService, List<Project> projects) {
         this.scannerService = scannerService;
-        this.projectTransferLogger = projectTransferLogger;
         this.projects = projects;
     }
 
@@ -42,7 +43,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ProjectTransferLogger getProjectLogger() {
-        return projectTransferLogger;
+    public Logger getLogger() {
+        return logger;
     }
 }

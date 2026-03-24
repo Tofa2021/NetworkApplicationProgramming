@@ -1,31 +1,34 @@
 package org.example.service;
 
+import org.apache.logging.log4j.Logger;
+import org.example.model.Nameable;
 import org.example.model.Project;
 import org.example.model.ProjectAssignable;
-import org.example.model.ProjectTransferLog;
 
 public interface ProjectService extends Service<Project> {
-    ProjectTransferLogger getProjectLogger();
+    Logger getLogger();
 
-    default void addToProject(Project project, ProjectAssignable participant) {
-        Project oldProject = participant.getProject();
+    default <T extends ProjectAssignable & Nameable> void addToProject(Project project, T participant) {
         project.addParticipant(participant);
         participant.setProject(project);
-        getProjectLogger().addLog(new ProjectTransferLog(oldProject, project, participant));
+        getLogger().info("{} added to project {}", participant.getName(), project.getName());
     }
 
-    default void removeFromProject(ProjectAssignable participant) {
+    default <T extends ProjectAssignable & Nameable> void removeFromProject(T participant) {
         Project project = participant.getProject();
         project.removeParticipant(participant);
         participant.setProject(null);
-        getProjectLogger().addLog(new ProjectTransferLog(project, null, participant));
+        getLogger().info("{} removed from project {}", participant.getName(), project.getName());
     }
 
-    default void transfer(Project newProject, ProjectAssignable participant) {
+    default <T extends ProjectAssignable & Nameable> void transfer(Project newProject, T participant) {
         Project oldProject = participant.getProject();
-        oldProject.removeParticipant(participant);
-        participant.setProject(newProject);
-        newProject.addParticipant(participant);
-        getProjectLogger().addLog(new ProjectTransferLog(oldProject, newProject, participant));
+        if (oldProject == null) {
+            getLogger().warn("{} cannot be transferred oldProject = null", participant.getName());
+            return;
+        }
+        removeFromProject(participant);
+        addToProject(newProject, participant);
+        getLogger().info("{} transferred from project {} to project {}", participant.getName(), oldProject.getName(), newProject.getName());
     }
 }
