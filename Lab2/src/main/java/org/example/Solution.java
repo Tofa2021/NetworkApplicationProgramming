@@ -148,7 +148,7 @@ public class Solution {
                     System.out.println("Выберите проект в который будет переведен сотрудник");
                     Project newProject = projectService.select();
                     List<Employee> employees = employeeService.getElements().stream()
-                            .filter(employee -> employee.getProject() != newProject)
+                            .filter(employee -> employee.getProject() != newProject && employee.getProject() != null)
                             .toList();
                     if (employees.isEmpty()) {
                         System.out.println("Пусто");
