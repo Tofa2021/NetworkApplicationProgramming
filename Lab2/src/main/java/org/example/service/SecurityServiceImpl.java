@@ -9,18 +9,14 @@ public class SecurityServiceImpl implements SecurityService {
     }
 
     @Override
-    public boolean checkPassword(String password) {
+    public boolean isPasswordCorrect(String password) {
         return password.equals(PASSWORD);
     }
 
     @Override
-    public void handleSecuredAction(Runnable runnable) {
+    public boolean checkPassword() {
         System.out.println("Введите пароль");
-        String password = scannerService.scanString();
-        if (checkPassword(password)) {
-            runnable.run();
-        } else {
-            System.out.println("Неправильный пароль");
-        }
+        String password = scannerService.scanNonEmptyString();
+        return isPasswordCorrect(password);
     }
 }

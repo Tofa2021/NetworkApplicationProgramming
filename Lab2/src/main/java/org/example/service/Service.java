@@ -12,6 +12,8 @@ public interface Service<T extends Nameable> {
 
     boolean add(T element);
 
+    void update();
+
     T remove(int index);
 
     boolean remove(T element);

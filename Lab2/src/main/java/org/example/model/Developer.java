@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Developer extends Employee {
-    private final List<ProgrammingLanguages> programmingLanguages;
+    private List<ProgrammingLanguages> programmingLanguages;
 
     public Developer(String name, double salary, Grade grade, int workExperience, List<Skill> skills, List<ProgrammingLanguages> programmingLanguages) {
         super(name, salary, grade, workExperience, skills);
@@ -27,5 +27,9 @@ public class Developer extends Employee {
                 );
 
         return super.getDescription() + languagesString;
+    }
+
+    public void setProgrammingLanguages(List<ProgrammingLanguages> programmingLanguages) {
+        this.programmingLanguages = programmingLanguages;
     }
 }

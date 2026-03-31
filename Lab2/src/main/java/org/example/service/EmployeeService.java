@@ -53,5 +53,5 @@ public interface EmployeeService extends DescribableService<Employee> {
 
     List<Employee> getExcludingProject(Project project);
 
-    List<Employee> getExcludingProjectNonNull(Project project);
+    List<Employee> getNonNullExcludingProject(Project project);
 }

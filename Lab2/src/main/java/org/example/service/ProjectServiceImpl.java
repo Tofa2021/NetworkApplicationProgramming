@@ -42,13 +42,48 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public void update() {
+        if (!securityService.checkPassword()) {
+            System.out.println("Неверный пароль");
+            return;
+        }
+
+        System.out.println("Выберите проект для редактирования");
+        Project project = select();
+        System.out.println(project.getName());
+        System.out.println("""
+                Выберите, что редактировать
+                1) Название
+                """);
+        switch (scannerService.scanInt()) {
+            case 1 -> updateName(project);
+            default -> System.out.println("Невозможный пункт меню");
+        }
+    }
+
+    private void updateName(Project project) {
+        System.out.println("Введите название");
+        project.setName(scannerService.scanNonEmptyString());
+    }
+
+    @Override
     public boolean remove(Project project) {
         return projects.remove(project);
     }
 
     @Override
     public void removeSelected() {
-        securityService.handleSecuredAction(() -> remove(select()));
+        if (!securityService.checkPassword()) {
+            System.out.println("Неверный пароль");
+            return;
+        }
+
+        if (projects.isEmpty()) {
+            System.out.println("Пусто");
+            return;
+        }
+
+        remove(select());
     }
 
     @Override

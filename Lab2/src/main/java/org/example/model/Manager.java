@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Manager extends Employee {
-    private final int teamSize;
+    private int teamSize;
 
     public Manager(String name, double salary, Grade grade, int workExperience, List<Skill> skills, int teamSize) {
         super(name, salary, grade, workExperience, skills);
@@ -18,5 +18,9 @@ public class Manager extends Employee {
     @Override
     public String getDescription() {
         return super.getDescription() + " Размер команды: " + teamSize;
+    }
+
+    public void setTeamSize(int teamSize) {
+        this.teamSize = teamSize;
     }
 }

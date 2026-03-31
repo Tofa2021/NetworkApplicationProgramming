@@ -1,10 +1,7 @@
 package org.example.service;
 
 import org.example.EmployeeFactory;
-import org.example.model.Employee;
-import org.example.model.Grade;
-import org.example.model.Project;
-import org.example.model.Skill;
+import org.example.model.*;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -153,15 +150,72 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getExcludingProjectNonNull(Project project) {
+    public List<Employee> getNonNullExcludingProject(Project project) {
         return employees.stream()
                 .filter(employee -> employee.getProject() != project && employee.getProject() != null)
                 .toList();
     }
 
     @Override
+    public void update() {
+        if (!securityService.checkPassword()) {
+            System.out.println("Неверный пароль");
+            return;
+        }
+
+        System.out.println("Выберите сотрудника для редактирования");
+        Employee employee = select();
+        System.out.println(employee.getDescription());
+        System.out.println("""
+                Выберите, что редактировать
+                1) Имя
+                2) Стаж
+                3) Навыки
+                4) Грейд
+                5) Зарплата""");
+
+        if (employee instanceof Developer) {
+            System.out.println("6) Языки программирования");
+        } else if (employee instanceof Tester) {
+            System.out.println("6) Инструменты тестирования");
+        } else if (employee instanceof Manager) {
+            System.out.println("6) Количество подчиненных");
+        }
+
+        switch (scannerService.scanInt()) {
+            case 1 -> employee.setName(employeeFactory.inputName());
+            case 2 -> employee.setWorkExperience(employeeFactory.inputWorkExperience());
+            case 3 -> employee.setSkills(employeeFactory.inputSkills());
+            case 4 -> employee.setGrade(employeeFactory.inputGrade());
+            case 5 -> employee.setSalary(employeeFactory.inputSalary());
+            case 6 -> {
+                if (employee instanceof Developer developer) {
+                    developer.setProgrammingLanguages(employeeFactory.inputProgrammingLanguages());
+                } else if (employee instanceof Tester tester) {
+                    tester.setTestTools(employeeFactory.inputTestTools());
+                } else if (employee instanceof Manager manager) {
+                    manager.setTeamSize(employeeFactory.inputTeamSize());
+                } else {
+                    System.out.println("Невозможный пункт меню");
+                }
+            }
+            default -> System.out.println("Невозможный пункт меню");
+        }
+    }
+
+    @Override
     public void removeSelected() {
-        securityService.handleSecuredAction(() -> remove(select()));
+        if (!securityService.checkPassword()) {
+            System.out.println("Неверный пароль");
+            return;
+        }
+
+        if (employees.isEmpty()) {
+            System.out.println("Пусто");
+            return;
+        }
+
+        remove(select());
     }
 
     @Override

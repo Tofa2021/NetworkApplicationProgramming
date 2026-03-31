@@ -50,7 +50,7 @@ public class Solution {
 
             case 4 -> employeeService.printDescribableList();
 
-//            case 5 -> ; // TODO update
+            case 5 -> employeeService.update();
 
             case 6 -> employeeService.removeSelected();
 
@@ -181,7 +181,7 @@ public class Solution {
 
             case 2 -> projectService.printList();
 
-//            case 3 -> ; // TODO update
+            case 3 -> projectService.update();
 
             case 4 -> projectService.removeSelected();
 

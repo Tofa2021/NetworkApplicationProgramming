@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Tester extends Employee {
-    private final List<TestTools> testTools;
+    private List<TestTools> testTools;
 
     public Tester(String name, double salary, Grade grade, int workExperience, List<Skill> skills, List<TestTools> testTools) {
         super(name, salary, grade, workExperience, skills);
@@ -27,5 +27,9 @@ public class Tester extends Employee {
                 );
 
         return super.getDescription() + testToolsString;
+    }
+
+    public void setTestTools(List<TestTools> testTools) {
+        this.testTools = testTools;
     }
 }

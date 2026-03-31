@@ -1,7 +1,7 @@
 package org.example.service;
 
 public interface SecurityService {
-    boolean checkPassword(String password);
+    boolean isPasswordCorrect(String password);
 
-    void handleSecuredAction(Runnable runnable);
+    boolean checkPassword();
 }

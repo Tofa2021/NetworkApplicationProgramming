@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Project implements Nameable {
-    private final String name;
     private final List<ProjectAssignable> participants;
+    private String name;
 
     public Project(String name) {
         this.name = name;
@@ -20,6 +20,10 @@ public class Project implements Nameable {
     @Override
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void addParticipant(ProjectAssignable participant) {
