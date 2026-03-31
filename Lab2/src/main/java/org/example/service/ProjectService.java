@@ -31,4 +31,6 @@ public interface ProjectService extends Service<Project> {
         addToProject(newProject, participant);
         getLogger().info("{} transferred from project {} to project {}", participant.getName(), oldProject.getName(), newProject.getName());
     }
+
+    void create();
 }

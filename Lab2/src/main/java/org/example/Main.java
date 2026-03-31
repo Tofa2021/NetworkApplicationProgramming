@@ -1,29 +1,22 @@
 package org.example;
 
-import org.example.model.Project;
-import org.example.service.EmployeeServiceImpl;
-import org.example.service.ProjectServiceImpl;
-import org.example.service.ScannerService;
-import org.example.service.SystemInService;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.example.model.Employee;
+import org.example.service.*;
 
 public class Main {
     public static void main(String[] args) {
         ScannerService scannerService = SystemInService.INSTANCE;
 
-        Solution.solve(
-                scannerService,
-                new EmployeeServiceImpl(scannerService),
-                new ProjectServiceImpl(
-                        scannerService,
-                        new ArrayList<>(List.of(
-                                new Project("AbacusDelivery"),
-                                new Project("DiceHome")
-                        ))
-                ),
-                new EmployeeFactory(scannerService)
-        );
+        StorageService<Employee> employeeStorageService = new FileStorageService();
+
+        EmployeeFactory employeeFactory = new EmployeeFactory(scannerService);
+        SecurityService securityService = new SecurityServiceImpl(scannerService);
+
+        EmployeeService employeeService = new EmployeeServiceImpl(scannerService, employeeStorageService, securityService, employeeFactory);
+        ProjectService projectService = new ProjectServiceImpl(scannerService, securityService);
+
+        Solution solution = new Solution(scannerService, employeeService, projectService);
+
+        solution.solve();
     }
 }

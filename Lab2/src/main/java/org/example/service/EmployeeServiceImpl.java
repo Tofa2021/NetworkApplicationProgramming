@@ -1,8 +1,9 @@
 package org.example.service;
 
-import org.example.FileManager;
+import org.example.EmployeeFactory;
 import org.example.model.Employee;
 import org.example.model.Grade;
+import org.example.model.Project;
 import org.example.model.Skill;
 
 import java.util.*;
@@ -11,14 +12,31 @@ import java.util.stream.Collectors;
 
 public class EmployeeServiceImpl implements EmployeeService {
     private final ScannerService scannerService;
+    private final StorageService<Employee> storageService;
+    private final SecurityService securityService;
+    private final EmployeeFactory employeeFactory;
     private List<Employee> employees = new ArrayList<>();
 
-    public EmployeeServiceImpl(ScannerService scannerService) {
+    public EmployeeServiceImpl(ScannerService scannerService,
+                               StorageService<Employee> storageService, SecurityService securityService,
+                               EmployeeFactory employeeFactory
+    ) {
         this.scannerService = scannerService;
+        this.storageService = storageService;
+        this.securityService = securityService;
+        this.employeeFactory = employeeFactory;
     }
 
-    public EmployeeServiceImpl(ScannerService scannerService, List<Employee> employees) {
+    public EmployeeServiceImpl(
+            ScannerService scannerService,
+            StorageService<Employee> storageService, SecurityService securityService,
+            EmployeeFactory employeeFactory,
+            List<Employee> employees
+    ) {
         this.scannerService = scannerService;
+        this.storageService = storageService;
+        this.securityService = securityService;
+        this.employeeFactory = employeeFactory;
         this.employees = employees;
     }
 
@@ -75,6 +93,21 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public void createDeveloper() {
+        employees.add(employeeFactory.createDeveloper());
+    }
+
+    @Override
+    public void createTester() {
+        employees.add(employeeFactory.createTester());
+    }
+
+    @Override
+    public void createManager() {
+        employees.add(employeeFactory.createManager());
+    }
+
+    @Override
     public ScannerService getScannerService() {
         return scannerService;
     }
@@ -102,12 +135,38 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void save() {
-        FileManager.save(employees);
+        storageService.save(employees);
+    }
+
+    @Override
+    public List<Employee> getWithoutProject() {
+        return employees.stream()
+                .filter(employee -> employee.getProject() == null)
+                .toList();
+    }
+
+    @Override
+    public List<Employee> getExcludingProject(Project project) {
+        return employees.stream()
+                .filter(employee -> employee.getProject() != project)
+                .toList();
+    }
+
+    @Override
+    public List<Employee> getExcludingProjectNonNull(Project project) {
+        return employees.stream()
+                .filter(employee -> employee.getProject() != project && employee.getProject() != null)
+                .toList();
+    }
+
+    @Override
+    public void removeSelected() {
+        securityService.handleSecuredAction(() -> remove(select()));
     }
 
     @Override
     public void load() {
-        employees = FileManager.load();
+        employees = storageService.load();
     }
 
     @Override

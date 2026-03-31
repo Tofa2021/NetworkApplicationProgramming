@@ -12,15 +12,11 @@ import java.util.function.Predicate;
 public interface EmployeeService extends DescribableService<Employee> {
     void sortByRole();
 
+    void sortByName();
+
     Map<String, List<Employee>> getMappedByRole();
 
-    void save();
-
-    void load();
-
     List<Employee> getByRole(Predicate<Employee> predicate);
-
-    void sortByName();
 
     List<Employee> getByName(String name);
 
@@ -36,5 +32,26 @@ public interface EmployeeService extends DescribableService<Employee> {
 
     Map<Grade, List<Employee>> getMappedByGrade();
 
-    List<Employee> getFiltered(Predicate<Employee> rolePredicate, int minWorkExperience, int maxWorkExperience, List<Skill> skills);
+    List<Employee> getFiltered(
+            Predicate<Employee> rolePredicate,
+            int minWorkExperience,
+            int maxWorkExperience,
+            List<Skill> skills
+    );
+
+    void createDeveloper();
+
+    void createTester();
+
+    void createManager();
+
+    void load();
+
+    void save();
+
+    List<Employee> getWithoutProject();
+
+    List<Employee> getExcludingProject(Project project);
+
+    List<Employee> getExcludingProjectNonNull(Project project);
 }

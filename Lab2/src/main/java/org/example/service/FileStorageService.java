@@ -1,4 +1,4 @@
-package org.example;
+package org.example.service;
 
 import org.example.model.Employee;
 
@@ -10,10 +10,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FileManager {
-    private static final String FILE_NAME = "employees.dat";
+public class FileStorageService implements StorageService<Employee> {
+    private final String FILE_NAME = "employees.dat";
 
-    public static void save(List<Employee> employees) {
+    @Override
+    public void save(List<Employee> employees) {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(Paths.get(FILE_NAME)))) {
             objectOutputStream.writeObject(employees);
         } catch (IOException e) {
@@ -21,7 +22,8 @@ public class FileManager {
         }
     }
 
-    public static List<Employee> load() {
+    @Override
+    public List<Employee> load() {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(Paths.get(FILE_NAME)))) {
             return (List<Employee>) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {

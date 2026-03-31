@@ -16,6 +16,8 @@ public interface Service<T extends Nameable> {
 
     boolean remove(T element);
 
+    void removeSelected();
+
     default T select() {
         return Utils.select(getScannerService(), getElements());
     }
