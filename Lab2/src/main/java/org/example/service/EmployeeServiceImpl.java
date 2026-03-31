@@ -12,6 +12,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final StorageService<Employee> storageService;
     private final SecurityService securityService;
     private final EmployeeFactory employeeFactory;
+    private final Map<Payable, Double> salaries = new HashMap<>();
     private List<Employee> employees = new ArrayList<>();
 
     public EmployeeServiceImpl(ScannerService scannerService,
@@ -40,11 +41,6 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public boolean add(Employee employee) {
         return employees.add(employee);
-    }
-
-    @Override
-    public Employee remove(int index) {
-        return employees.remove(index);
     }
 
     @Override
@@ -150,7 +146,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public List<Employee> getNonNullExcludingProject(Project project) {
+    public List<Employee> getWithProjectExcludingProject(Project project) {
         return employees.stream()
                 .filter(employee -> employee.getProject() != project && employee.getProject() != null)
                 .toList();

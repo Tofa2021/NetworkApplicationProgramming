@@ -12,9 +12,9 @@ import java.util.function.Predicate;
 public class Solution {
     private final ScannerService scannerService;
     private final EmployeeService employeeService;
-    private final ProjectService projectService;
+    private final ProjectService<Employee> projectService;
 
-    public Solution(ScannerService scannerService, EmployeeService employeeService, ProjectService projectService) {
+    public Solution(ScannerService scannerService, EmployeeService employeeService, ProjectService<Employee> projectService) {
         this.scannerService = scannerService;
         this.employeeService = employeeService;
         this.projectService = projectService;
@@ -196,11 +196,29 @@ public class Solution {
                 3) Удалить из проекта
                 """);
         switch (scannerService.scanInt()) {
-            case 1 -> projectService.create();
+            case 1 -> {
+                System.out.println("Выберите проект в который добавить сотрудника");
+                Project project = projectService.select();
+                System.out.println("Выберите сотрудника");
+                Employee employee = employeeService.selectWithoutProject();
+                projectService.addToProject(project, employee);
+            }
 
-            case 2 -> projectService.printList();
+            case 2 -> {
+                System.out.println("Выберите проект в который перевести сотрудника");
+                Project project = projectService.select();
+                System.out.println("Выберите сотрудника");
+                Employee employee = employeeService.selectWithProjectExcludingProject(project);
+                projectService.transfer(project, employee);
+            }
 
-            case 3 -> projectService.removeSelected();
+            case 3 -> {
+                System.out.println("Выберите проект");
+                Project project = projectService.select();
+                System.out.println("Выберите сотрудника");
+                Employee employee = employeeService.select(projectService.getProjectAssignables(project));
+                projectService.removeFromProject(employee);
+            }
 
             default -> System.out.println("Невозможный пункт меню");
         }

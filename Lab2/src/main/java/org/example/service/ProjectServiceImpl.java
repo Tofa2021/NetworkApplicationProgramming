@@ -2,28 +2,21 @@ package org.example.service;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.example.model.Employee;
 import org.example.model.Project;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
-public class ProjectServiceImpl implements ProjectService {
+public class ProjectServiceImpl implements ProjectService<Employee> {
     private final Logger logger = LogManager.getLogger(ProjectServiceImpl.class);
     private final ScannerService scannerService;
     private final SecurityService securityService;
-    private final List<Project> projects;
+    private final Map<Project, List<Employee>> projects;
 
     public ProjectServiceImpl(ScannerService scannerService, SecurityService securityService) {
         this.scannerService = scannerService;
         this.securityService = securityService;
-        this.projects = new ArrayList<>();
-    }
-
-    public ProjectServiceImpl(ScannerService scannerService, SecurityService securityService, List<Project> projects) {
-        this.scannerService = scannerService;
-        this.securityService = securityService;
-        this.projects = projects;
+        this.projects = new HashMap<>();
     }
 
     @Override
@@ -33,12 +26,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public List<Project> getElements() {
-        return Collections.unmodifiableList(projects);
+        return projects.keySet().stream().toList();
     }
 
     @Override
     public boolean add(Project project) {
-        return projects.add(project);
+        return Objects.requireNonNull(projects.put(project, new ArrayList<>())).isEmpty();
     }
 
     @Override
@@ -68,7 +61,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean remove(Project project) {
-        return projects.remove(project);
+        return !projects.remove(project).isEmpty();
     }
 
     @Override
@@ -87,17 +80,39 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project remove(int index) {
-        return projects.remove(index);
-    }
-
-    @Override
-    public Logger getLogger() {
-        return logger;
-    }
-
-    @Override
     public void create() {
-        projects.add(new Project(scannerService.scanNonEmptyString()));
+        projects.put(new Project(scannerService.scanNonEmptyString()), new ArrayList<>());
+    }
+
+    @Override
+    public List<Employee> getProjectAssignables(Project project) {
+        return projects.get(project);
+    }
+
+    @Override
+    public void addToProject(Project project, Employee participant) {
+        projects.get(project).add(participant);
+        participant.setProject(project);
+        logger.info("{} added to project {}", participant.getName(), project.getName());
+    }
+
+    @Override
+    public void removeFromProject(Employee participant) {
+        Project project = participant.getProject();
+        projects.get(project).remove(participant);
+        participant.setProject(null);
+        logger.info("{} removed from project {}", participant.getName(), project.getName());
+    }
+
+    @Override
+    public void transfer(Project newProject, Employee participant) {
+        Project oldProject = participant.getProject();
+        if (oldProject == null) {
+            logger.warn("{} cannot be transferred oldProject = null", participant.getName());
+            return;
+        }
+        removeFromProject(participant);
+        addToProject(newProject, participant);
+        logger.info("{} transferred from project {} to project {}", participant.getName(), oldProject.getName(), newProject.getName());
     }
 }

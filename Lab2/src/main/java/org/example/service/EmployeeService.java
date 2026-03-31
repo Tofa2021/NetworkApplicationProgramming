@@ -51,7 +51,15 @@ public interface EmployeeService extends DescribableService<Employee> {
 
     List<Employee> getWithoutProject();
 
+    default Employee selectWithoutProject() {
+        return select(getWithoutProject());
+    }
+
     List<Employee> getExcludingProject(Project project);
 
-    List<Employee> getNonNullExcludingProject(Project project);
+    List<Employee> getWithProjectExcludingProject(Project project);
+
+    default Employee selectWithProjectExcludingProject(Project project) {
+        return select(getWithProjectExcludingProject(project));
+    }
 }

@@ -13,7 +13,7 @@ public class Main {
         SecurityService securityService = new SecurityServiceImpl(scannerService);
 
         EmployeeService employeeService = new EmployeeServiceImpl(scannerService, employeeStorageService, securityService, employeeFactory);
-        ProjectService projectService = new ProjectServiceImpl(scannerService, securityService);
+        ProjectService<Employee> projectService = new ProjectServiceImpl(scannerService, securityService);
 
         Solution solution = new Solution(scannerService, employeeService, projectService);
 
