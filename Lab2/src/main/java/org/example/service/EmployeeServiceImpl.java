@@ -67,6 +67,14 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public List<Employee> getFiltered(Predicate<Employee> rolePredicate, int minWorkExperience, int maxWorkExperience, List<Skill> skills) {
+        return getByRole(rolePredicate).stream()
+                .filter(getByWorkExperience(minWorkExperience, maxWorkExperience)::contains)
+                .filter(getBySkills(skills)::contains)
+                .toList();
+    }
+
+    @Override
     public ScannerService getScannerService() {
         return scannerService;
     }

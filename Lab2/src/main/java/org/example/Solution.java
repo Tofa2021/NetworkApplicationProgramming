@@ -41,6 +41,7 @@ public class Solution {
                     17) Перевести сотрудника на проект
                     18) Удалить из проекта
                     19) Статистика по грейдам
+                    20) Фильтр должность ∧ стаж ∧ навыки
                     0) Выход""");
             switch (scanner.scanInt()) {
                 case 0 -> {
@@ -70,7 +71,7 @@ public class Solution {
                             .toList();
                     if (employees.isEmpty()) {
                         System.out.println("Пусто");
-                        return;
+                        continue;
                     }
                     Employee employee = employeeService.select(employees);
                     projectService.addToProject(project, employee);
@@ -152,7 +153,7 @@ public class Solution {
                             .toList();
                     if (employees.isEmpty()) {
                         System.out.println("Пусто");
-                        return;
+                        continue;
                     }
                     System.out.println("Выберите сотрудника для перевода");
                     Employee employee = employeeService.select(employees);
@@ -166,7 +167,7 @@ public class Solution {
                             .toList();
                     if (projectEmployees.isEmpty()) {
                         System.out.println("Пусто");
-                        return;
+                        continue;
                     }
                     System.out.println("Выберите сотрудника");
                     Employee employee = employeeService.select(projectEmployees);
@@ -178,6 +179,35 @@ public class Solution {
                     for (var entry : map.entrySet()) {
                         System.out.println(entry.getKey().getName() + " " + entry.getValue().size());
                     }
+                }
+
+                case 20 -> {
+                    System.out.println("""
+                            Выберите должность
+                            1) Разработчик
+                            2) Тестировщик
+                            3) Менеджер""");
+                    Predicate<Employee> predicate = switch (scanner.scanBorderInt(0, 3)) {
+                        case 1 -> Developer.getIsInstancePredicate();
+                        case 2 -> Tester.getIsInstancePredicate();
+                        case 3 -> Manager.getIsInstancePredicate();
+                        default -> throw new NoSuchElementException();
+                    };
+
+                    System.out.println("Введите минимальный стаж");
+                    int minWorkExperience = scanner.scanBorderInt(0, 100);
+
+                    System.out.println("Введите максимальный стаж");
+                    int maxWorkExperience = scanner.scanBorderInt(0, 100);
+                    if (minWorkExperience > maxWorkExperience) {
+                        System.out.println("Минимальное значение не может быть больше максимального");
+                        continue;
+                    }
+
+                    System.out.println("Выберите навыки");
+                    List<Skill> skills = Skill.multiSelect(scanner);
+
+                    Utils.printDescribableList(employeeService.getFiltered(predicate, minWorkExperience, maxWorkExperience, skills));
                 }
             }
         }

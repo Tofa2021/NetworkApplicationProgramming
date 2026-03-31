@@ -35,4 +35,6 @@ public interface EmployeeService extends DescribableService<Employee> {
     }
 
     Map<Grade, List<Employee>> getMappedByGrade();
+
+    List<Employee> getFiltered(Predicate<Employee> rolePredicate, int minWorkExperience, int maxWorkExperience, List<Skill> skills);
 }
