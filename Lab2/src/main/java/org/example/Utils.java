@@ -1,8 +1,8 @@
 package org.example;
 
-import org.example.model.Describable;
-import org.example.model.Nameable;
-import org.example.service.ScannerService;
+import org.example.model.interfaces.Describable;
+import org.example.model.interfaces.Nameable;
+import org.example.service.scanner.ScannerService;
 
 import java.util.ArrayList;
 import java.util.InputMismatchException;

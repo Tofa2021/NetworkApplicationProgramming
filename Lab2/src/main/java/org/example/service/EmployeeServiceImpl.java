@@ -2,6 +2,12 @@ package org.example.service;
 
 import org.example.EmployeeFactory;
 import org.example.model.*;
+import org.example.model.enums.Grade;
+import org.example.model.enums.Skill;
+import org.example.model.interfaces.Payable;
+import org.example.service.scanner.ScannerService;
+import org.example.service.security.SecurityService;
+import org.example.service.storage.StorageService;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -23,19 +29,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         this.storageService = storageService;
         this.securityService = securityService;
         this.employeeFactory = employeeFactory;
-    }
-
-    public EmployeeServiceImpl(
-            ScannerService scannerService,
-            StorageService<Employee> storageService, SecurityService securityService,
-            EmployeeFactory employeeFactory,
-            List<Employee> employees
-    ) {
-        this.scannerService = scannerService;
-        this.storageService = storageService;
-        this.securityService = securityService;
-        this.employeeFactory = employeeFactory;
-        this.employees = employees;
     }
 
     @Override
@@ -87,17 +80,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void createDeveloper() {
-        employees.add(employeeFactory.createDeveloper());
+        Developer developer = employeeFactory.createDeveloper();
+        salaries.put(developer, developer.getSalary());
+        employees.add(developer);
     }
 
     @Override
     public void createTester() {
-        employees.add(employeeFactory.createTester());
+        Tester tester = employeeFactory.createTester();
+        salaries.put(tester, tester.getSalary());
+        employees.add(tester);
     }
 
     @Override
     public void createManager() {
-        employees.add(employeeFactory.createManager());
+        Manager manager = employeeFactory.createManager();
+        salaries.put(manager, manager.getSalary());
+        employees.add(manager);
     }
 
     @Override
@@ -150,6 +149,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employees.stream()
                 .filter(employee -> employee.getProject() != project && employee.getProject() != null)
                 .toList();
+    }
+
+    @Override
+    public double getSalary(Payable payable) {
+        return salaries.get(payable);
     }
 
     @Override

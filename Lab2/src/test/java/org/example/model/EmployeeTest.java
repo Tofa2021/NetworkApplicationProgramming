@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.model.enums.Grade;
+import org.example.model.enums.Skill;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

@@ -1,4 +1,6 @@
-package org.example.service;
+package org.example.service.security;
+
+import org.example.service.scanner.ScannerService;
 
 public class SecurityServiceImpl implements SecurityService {
     private final String PASSWORD = "1234";

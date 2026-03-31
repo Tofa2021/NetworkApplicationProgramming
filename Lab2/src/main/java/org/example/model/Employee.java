@@ -1,5 +1,12 @@
 package org.example.model;
 
+import org.example.model.enums.Grade;
+import org.example.model.enums.Skill;
+import org.example.model.interfaces.Describable;
+import org.example.model.interfaces.Nameable;
+import org.example.model.interfaces.Payable;
+import org.example.model.interfaces.ProjectAssignable;
+
 import java.io.Serializable;
 import java.util.List;
 

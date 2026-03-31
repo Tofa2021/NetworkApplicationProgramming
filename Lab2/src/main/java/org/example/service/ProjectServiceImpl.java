@@ -1,21 +1,24 @@
 package org.example.service;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.example.model.Employee;
 import org.example.model.Project;
+import org.example.model.log.TransferLog;
+import org.example.service.log.TransferLogService;
+import org.example.service.scanner.ScannerService;
+import org.example.service.security.SecurityService;
 
 import java.util.*;
 
 public class ProjectServiceImpl implements ProjectService<Employee> {
-    private final Logger logger = LogManager.getLogger(ProjectServiceImpl.class);
     private final ScannerService scannerService;
     private final SecurityService securityService;
     private final Map<Project, List<Employee>> projects;
+    private final TransferLogService<Employee> transferLogService;
 
-    public ProjectServiceImpl(ScannerService scannerService, SecurityService securityService) {
+    public ProjectServiceImpl(ScannerService scannerService, SecurityService securityService, TransferLogService<Employee> transferLogService) {
         this.scannerService = scannerService;
         this.securityService = securityService;
+        this.transferLogService = transferLogService;
         this.projects = new HashMap<>();
     }
 
@@ -81,6 +84,7 @@ public class ProjectServiceImpl implements ProjectService<Employee> {
 
     @Override
     public void create() {
+        System.out.println("Введите название проекта");
         projects.put(new Project(scannerService.scanNonEmptyString()), new ArrayList<>());
     }
 
@@ -90,29 +94,33 @@ public class ProjectServiceImpl implements ProjectService<Employee> {
     }
 
     @Override
-    public void addToProject(Project project, Employee participant) {
-        projects.get(project).add(participant);
-        participant.setProject(project);
-        logger.info("{} added to project {}", participant.getName(), project.getName());
+    public void printTransferLogs() {
+        transferLogService.printLogs();
     }
 
     @Override
-    public void removeFromProject(Employee participant) {
-        Project project = participant.getProject();
-        projects.get(project).remove(participant);
-        participant.setProject(null);
-        logger.info("{} removed from project {}", participant.getName(), project.getName());
+    public void addToProject(Project project, Employee employee) {
+        projects.get(project).add(employee);
+        employee.setProject(project);
+        transferLogService.add(new TransferLog<>(employee, null, project));
     }
 
     @Override
-    public void transfer(Project newProject, Employee participant) {
-        Project oldProject = participant.getProject();
+    public void removeFromProject(Employee employee) {
+        Project project = employee.getProject();
+        projects.get(project).remove(employee);
+        employee.setProject(null);
+        transferLogService.add(new TransferLog<>(employee, project, null));
+    }
+
+    @Override
+    public void transfer(Project newProject, Employee employee) {
+        Project oldProject = employee.getProject();
         if (oldProject == null) {
-            logger.warn("{} cannot be transferred oldProject = null", participant.getName());
             return;
         }
-        removeFromProject(participant);
-        addToProject(newProject, participant);
-        logger.info("{} transferred from project {} to project {}", participant.getName(), oldProject.getName(), newProject.getName());
+        removeFromProject(employee);
+        addToProject(newProject, employee);
+        transferLogService.add(new TransferLog<>(employee, oldProject, newProject));
     }
 }

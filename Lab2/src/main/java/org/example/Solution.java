@@ -1,9 +1,10 @@
 package org.example;
 
 import org.example.model.*;
+import org.example.model.enums.Skill;
 import org.example.service.EmployeeService;
 import org.example.service.ProjectService;
-import org.example.service.ScannerService;
+import org.example.service.scanner.ScannerService;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -194,7 +195,7 @@ public class Solution {
                 1) Добавить сотрудника в проект
                 2) Перевести сотрудника на проект
                 3) Удалить из проекта
-                """);
+                4) Просмотреть журнал переводов""");
         switch (scannerService.scanInt()) {
             case 1 -> {
                 System.out.println("Выберите проект в который добавить сотрудника");
@@ -219,6 +220,8 @@ public class Solution {
                 Employee employee = employeeService.select(projectService.getProjectAssignables(project));
                 projectService.removeFromProject(employee);
             }
+
+            case 4 -> projectService.printTransferLogs();
 
             default -> System.out.println("Невозможный пункт меню");
         }

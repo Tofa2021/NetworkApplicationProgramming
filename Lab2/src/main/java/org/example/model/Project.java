@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.model.interfaces.Nameable;
+
 public class Project implements Nameable {
     private String name;
 

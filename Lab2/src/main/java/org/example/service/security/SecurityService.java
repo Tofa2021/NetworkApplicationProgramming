@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.service.security;
 
 public interface SecurityService {
     boolean isPasswordCorrect(String password);

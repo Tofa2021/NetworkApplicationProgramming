@@ -1,6 +1,13 @@
 package org.example;
 
-import org.example.model.*;
+import org.example.model.Developer;
+import org.example.model.Employee;
+import org.example.model.Manager;
+import org.example.model.Tester;
+import org.example.model.enums.Grade;
+import org.example.model.enums.ProgrammingLanguages;
+import org.example.model.enums.Skill;
+import org.example.model.enums.TestTools;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;

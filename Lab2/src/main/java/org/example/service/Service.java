@@ -1,7 +1,8 @@
 package org.example.service;
 
 import org.example.Utils;
-import org.example.model.Nameable;
+import org.example.model.interfaces.Nameable;
+import org.example.service.scanner.ScannerService;
 
 import java.util.List;
 

@@ -1,7 +1,8 @@
-package org.example.model;
+package org.example.model.enums;
 
 import org.example.Utils;
-import org.example.service.ScannerService;
+import org.example.model.interfaces.Nameable;
+import org.example.service.scanner.ScannerService;
 
 import java.util.List;
 

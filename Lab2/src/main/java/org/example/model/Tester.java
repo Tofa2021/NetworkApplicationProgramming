@@ -1,5 +1,9 @@
 package org.example.model;
 
+import org.example.model.enums.Grade;
+import org.example.model.enums.Skill;
+import org.example.model.enums.TestTools;
+
 import java.util.List;
 import java.util.function.Predicate;
 

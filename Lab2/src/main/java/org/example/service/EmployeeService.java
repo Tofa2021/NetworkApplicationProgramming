@@ -1,9 +1,10 @@
 package org.example.service;
 
 import org.example.model.Employee;
-import org.example.model.Grade;
 import org.example.model.Project;
-import org.example.model.Skill;
+import org.example.model.enums.Grade;
+import org.example.model.enums.Skill;
+import org.example.model.interfaces.Payable;
 
 import java.util.List;
 import java.util.Map;
@@ -62,4 +63,6 @@ public interface EmployeeService extends DescribableService<Employee> {
     default Employee selectWithProjectExcludingProject(Project project) {
         return select(getWithProjectExcludingProject(project));
     }
+
+    double getSalary(Payable payable);
 }
