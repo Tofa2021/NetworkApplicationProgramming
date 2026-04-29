@@ -3,8 +3,11 @@ package org.example;
 import org.example.model.*;
 import org.example.model.enums.Skill;
 import org.example.service.EmployeeService;
+import org.example.service.GlobalStorageService;
 import org.example.service.ProjectService;
+import org.example.service.ProjectServiceImpl;
 import org.example.service.scanner.ScannerService;
+import org.example.service.storage.CompanyData;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -14,11 +17,18 @@ public class Solution {
     private final ScannerService scannerService;
     private final EmployeeService employeeService;
     private final ProjectService<Employee> projectService;
+    private final GlobalStorageService globalStorageService;
 
-    public Solution(ScannerService scannerService, EmployeeService employeeService, ProjectService<Employee> projectService) {
+    public Solution(
+            ScannerService scannerService,
+            EmployeeService employeeService,
+            ProjectService<Employee> projectService,
+            GlobalStorageService globalStorageService
+    ) {
         this.scannerService = scannerService;
         this.employeeService = employeeService;
         this.projectService = projectService;
+        this.globalStorageService = globalStorageService;
     }
 
     private void handleEmployees() {
@@ -39,8 +49,7 @@ public class Solution {
                 14) Сортировка по должности
                 15) Статистика по ролям
                 16) Статистика по грейдам
-                17) Сохранить базу сотрудников
-                18) Загрузить базу сотрудников
+                17) Назад
                 """);
         switch (scannerService.scanInt()) {
             case 1 -> employeeService.createDeveloper();
@@ -162,9 +171,12 @@ public class Solution {
                 }
             }
 
-            case 17 -> employeeService.save();
+//            case 17 -> employeeService.save();
+//
+//            case 18 -> employeeService.load();
 
-            case 18 -> employeeService.load();
+            case 17 -> {
+            }
 
             default -> System.out.println("Невозможный пункт меню");
         }
@@ -176,6 +188,7 @@ public class Solution {
                 2) Просмотреть проекты
                 3) Редактировать проект
                 4) Удалить проект
+                5) Назад
                 """);
         switch (scannerService.scanInt()) {
             case 1 -> projectService.create();
@@ -186,6 +199,9 @@ public class Solution {
 
             case 4 -> projectService.removeSelected();
 
+            case 5 -> {
+            }
+
             default -> System.out.println("Невозможный пункт меню");
         }
     }
@@ -195,13 +211,21 @@ public class Solution {
                 1) Добавить сотрудника в проект
                 2) Перевести сотрудника на проект
                 3) Удалить из проекта
-                4) Просмотреть журнал переводов""");
+                4) Просмотреть журнал переводов
+                5) Посмотреть проекты и сотрудников в нем
+                6) Сохранить данные
+                7) Загрузить данные
+                8) Назад
+                """);
         switch (scannerService.scanInt()) {
             case 1 -> {
                 System.out.println("Выберите проект в который добавить сотрудника");
                 Project project = projectService.select();
                 System.out.println("Выберите сотрудника");
                 Employee employee = employeeService.selectWithoutProject();
+                if (employee == null) {
+                    return;
+                }
                 projectService.addToProject(project, employee);
             }
 
@@ -222,6 +246,25 @@ public class Solution {
             }
 
             case 4 -> projectService.printTransferLogs();
+
+            case 5 -> projectService.printProjectAndEmployees();
+
+            case 6 ->
+                    globalStorageService.save(new CompanyData(employeeService.getElements(), projectService.getElements()));
+
+            case 7 -> {
+                CompanyData data = globalStorageService.load();
+                employeeService.setAll(data.employees());
+
+                projectService.setAll(data.projects());
+
+                if (projectService instanceof ProjectServiceImpl) {
+                    ((ProjectServiceImpl) projectService).restoreProjectAssignments(employeeService.getElements());
+                }
+            }
+
+            case 8 -> {
+            }
 
             default -> System.out.println("Невозможный пункт меню");
         }

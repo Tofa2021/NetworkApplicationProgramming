@@ -1,4 +1,6 @@
-package org.example.service.storage;
+package org.example.service;
+
+import org.example.service.storage.CompanyData;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -6,27 +8,24 @@ import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
-public class FileStorageService<T> implements StorageService<T> {
-    private final String FILE_NAME = "employees.dat";
+public class GlobalStorageService {
+    private final String FILE_NAME = "company.dat";
 
-    @Override
-    public void save(List<T> elements) {
+    public void save(CompanyData data) {
         try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(Files.newOutputStream(Paths.get(FILE_NAME)))) {
-            objectOutputStream.writeObject(elements);
+            objectOutputStream.writeObject(data);
         } catch (IOException e) {
             System.out.println("Ошибка записи в файл");
         }
     }
 
-    @Override
-    public List<T> load() {
+    public CompanyData load() {
         try (ObjectInputStream objectInputStream = new ObjectInputStream(Files.newInputStream(Paths.get(FILE_NAME)))) {
-            return (List<T>) objectInputStream.readObject();
+            return (CompanyData) objectInputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("Ошибка чтения из файла");
-            return new ArrayList<>();
+            return new CompanyData(new ArrayList<>(), new ArrayList<>());
         }
     }
 }

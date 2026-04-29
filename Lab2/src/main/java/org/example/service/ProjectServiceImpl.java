@@ -6,19 +6,27 @@ import org.example.model.log.TransferLog;
 import org.example.service.log.TransferLogService;
 import org.example.service.scanner.ScannerService;
 import org.example.service.security.SecurityService;
+import org.example.service.storage.StorageService;
 
 import java.util.*;
 
 public class ProjectServiceImpl implements ProjectService<Employee> {
     private final ScannerService scannerService;
     private final SecurityService securityService;
-    private final Map<Project, List<Employee>> projects;
+    private final StorageService<Project> storageService;
     private final TransferLogService<Employee> transferLogService;
+    private final Map<Project, List<Employee>> projects;
 
-    public ProjectServiceImpl(ScannerService scannerService, SecurityService securityService, TransferLogService<Employee> transferLogService) {
+    public ProjectServiceImpl(
+            ScannerService scannerService,
+            SecurityService securityService,
+            StorageService<Project> storageService,
+            TransferLogService<Employee> transferLogService
+    ) {
         this.scannerService = scannerService;
         this.securityService = securityService;
         this.transferLogService = transferLogService;
+        this.storageService = storageService;
         this.projects = new HashMap<>();
     }
 
@@ -41,6 +49,11 @@ public class ProjectServiceImpl implements ProjectService<Employee> {
     public void update() {
         if (!securityService.checkPassword()) {
             System.out.println("Неверный пароль");
+            return;
+        }
+
+        if (projects.isEmpty()) {
+            System.out.println("Пусто");
             return;
         }
 
@@ -82,6 +95,27 @@ public class ProjectServiceImpl implements ProjectService<Employee> {
         remove(select());
     }
 
+    public void restoreProjectAssignments(List<Employee> allEmployees) {
+        for (List<Employee> employees : this.projects.values()) {
+            employees.clear();
+        }
+
+        for (Employee employee : allEmployees) {
+            Project project = employee.getProject();
+            if (project != null && this.projects.containsKey(project)) {
+                this.projects.get(project).add(employee);
+            }
+        }
+    }
+
+    @Override
+    public void setAll(List<Project> projects) {
+        this.projects.clear();
+        for (Project p : projects) {
+            this.projects.put(p, new ArrayList<>());
+        }
+    }
+
     @Override
     public void create() {
         System.out.println("Введите название проекта");
@@ -96,6 +130,14 @@ public class ProjectServiceImpl implements ProjectService<Employee> {
     @Override
     public void printTransferLogs() {
         transferLogService.printLogs();
+    }
+
+    @Override
+    public void printProjectAndEmployees() {
+        for (Map.Entry<Project, List<Employee>> entry : projects.entrySet()) {
+            String employeeString = String.join(" ", entry.getValue().stream().map(Employee::getName).toList());
+            System.out.println(entry.getKey().getName() + " " + employeeString);
+        }
     }
 
     @Override

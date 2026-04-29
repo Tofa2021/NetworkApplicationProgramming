@@ -13,9 +13,13 @@ public interface ProjectService<T extends ProjectAssignable & Nameable> extends 
 
     void transfer(Project newProject, T participant);
 
+    void setAll(List<Project> projects);
+
     void create();
 
     List<T> getProjectAssignables(Project project);
 
     void printTransferLogs();
+
+    void printProjectAndEmployees();
 }

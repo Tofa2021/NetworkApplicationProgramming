@@ -18,17 +18,20 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final StorageService<Employee> storageService;
     private final SecurityService securityService;
     private final EmployeeFactory employeeFactory;
-    private final Map<Payable, Double> salaries = new HashMap<>();
-    private List<Employee> employees = new ArrayList<>();
+    private final Map<Payable, Double> salaries;
+    private List<Employee> employees;
 
     public EmployeeServiceImpl(ScannerService scannerService,
-                               StorageService<Employee> storageService, SecurityService securityService,
+                               StorageService<Employee> storageService,
+                               SecurityService securityService,
                                EmployeeFactory employeeFactory
     ) {
         this.scannerService = scannerService;
         this.storageService = storageService;
         this.securityService = securityService;
         this.employeeFactory = employeeFactory;
+        this.salaries = new HashMap<>();
+        this.employees = new ArrayList<>();
     }
 
     @Override
@@ -67,7 +70,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public Map<Grade, List<Employee>> getMappedByGrade() {
-        return employees.stream().collect(Collectors.groupingBy(Employee::getGrade));
+        return employees.stream()
+                .collect(Collectors.groupingBy(Employee::getGrade));
     }
 
     @Override
@@ -163,6 +167,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             return;
         }
 
+        if (employees.isEmpty()) {
+            System.out.println("Пусто");
+            return;
+        }
+
         System.out.println("Выберите сотрудника для редактирования");
         Employee employee = select();
         System.out.println(employee.getDescription());
@@ -216,6 +225,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
 
         remove(select());
+    }
+
+    @Override
+    public void setAll(List<Employee> elements) {
+        employees = new ArrayList<>(elements);
     }
 
     @Override

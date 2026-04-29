@@ -2,7 +2,9 @@ package org.example.model;
 
 import org.example.model.interfaces.Nameable;
 
-public class Project implements Nameable {
+import java.io.Serializable;
+
+public class Project implements Nameable, Serializable {
     private String name;
 
     public Project(String name) {

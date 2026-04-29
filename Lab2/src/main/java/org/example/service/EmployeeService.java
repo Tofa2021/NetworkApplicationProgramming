@@ -53,7 +53,13 @@ public interface EmployeeService extends DescribableService<Employee> {
     List<Employee> getWithoutProject();
 
     default Employee selectWithoutProject() {
-        return select(getWithoutProject());
+        List<Employee> employees = getWithoutProject();
+        if (employees.isEmpty()) {
+            System.out.println("Пусто");
+            return null;
+        }
+        
+        return select();
     }
 
     List<Employee> getExcludingProject(Project project);
@@ -65,4 +71,6 @@ public interface EmployeeService extends DescribableService<Employee> {
     }
 
     double getSalary(Payable payable);
+
+    void setAll(List<Employee> employees);
 }
