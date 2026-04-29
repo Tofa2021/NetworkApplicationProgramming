@@ -23,13 +23,11 @@ public class Polynomial {
 
         if (newCoefficient == 0) {
             coefficients.remove(degree);
-            updateDegree();
         } else {
             coefficients.put(degree, newCoefficient);
-            if (degree > this.degree) {
-                this.degree = degree;
-            }
         }
+
+        updateDegree();
     }
 
     private void updateDegree() {
@@ -50,7 +48,6 @@ public class Polynomial {
         for (Map.Entry<Integer, Double> entry : coefficients.entrySet().stream()
                 .sorted(Map.Entry.<Integer, Double>comparingByKey().reversed())
                 .toList()) {
-
             int degree = entry.getKey();
             double coefficient = entry.getValue();
 
